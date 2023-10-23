@@ -1,0 +1,20 @@
+postIndexPrevalence:
+  cohorts:
+    targetCohorts:
+    - targetName: hmb
+      targetId: 1
+    - targetName: hmb2
+      targetId: 2
+    covariateCohorts:
+    - covariateName: anxiety
+      covariateId: 3
+    - covariateName: t2dm
+      covariateId: 4
+  timeWindow:
+  - startDay: 1
+    endDay: 7
+  - startDay: 1
+    endDay: 30
+  - startDay: 1
+    endDay: 183
+  outputFolder: 04_postIndexCharacteristics

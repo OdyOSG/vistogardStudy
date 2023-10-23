@@ -1,0 +1,16 @@
+baselineCharacteristics:
+  cohorts:
+    targetCohorts:
+    - targetName: hmb
+      targetId: 1
+    - targetName: hmb2
+      targetId: 2
+    covariateCohorts:
+    - covariateName: anxiety
+      covariateId: 3
+    - covariateName: t2dm
+      covariateId: 4
+  timeWindow:
+  - startDay: -365
+    endDay: -1
+  outputFolder: 03_baselineCharacteristics

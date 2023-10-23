@@ -1,0 +1,69 @@
+# A. Meta Info -----------------------
+
+# Name: Build Cohorts
+
+# B. Dependencies ----------------------
+
+library(tidyverse, quietly = TRUE)
+library(DatabaseConnector)
+library(config)
+
+source("analysis/private/_utilities.R")
+source("analysis/private/_buildCohorts.R")
+
+
+# C. Connection ----------------------
+
+# Set connection Block
+# <<<
+configBlock <- "optum"
+# >>>
+
+# Provide connection details
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = config::get("dbms", config = configBlock),
+  user = config::get("user", config = configBlock),
+  password = config::get("password", config = configBlock),
+  connectionString = config::get("connectionString", config = configBlock)
+)
+
+
+# Connect to database
+con <- DatabaseConnector::connect(connectionDetails)
+
+
+# D. Study Variables -----------------------
+
+### Administrative Variables
+executionSettings <- config::get(config = configBlock) %>%
+  purrr::discard_at(c("dbms", "user", "password", "connectionString"))
+
+outputFolder <- here::here("results") %>%
+  fs::path(executionSettings$databaseName, "01_buildCohorts") %>%
+  fs::dir_create()
+
+
+### Add study variables or load from settings
+cohortManifest <- getCohortManifest()
+
+
+# E. Script --------------------
+
+startSnowflakeSession(executionSettings = executionSettings, con = con)
+
+### RUN ONCE - Initialize cohort table #########
+initializeCohortTables(executionSettings = executionSettings, con = con)
+
+
+# Generate cohorts
+generatedCohorts <- generateCohorts(
+  executionSettings = executionSettings,
+  con = con,
+  cohortManifest = cohortManifest,
+  outputFolder = outputFolder
+)
+
+
+# F. Session Info ------------------------
+DatabaseConnector::disconnect(con)
+

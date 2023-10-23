@@ -1,0 +1,23 @@
+incidenceAnalysis:
+  cohorts:
+    denominator:
+    - name: hmb
+      id: 1
+    - name: reaction
+      id: 6
+    numerator:
+    - name: benzodiazepines
+      id: 5
+    - name: reaction
+      id: 6
+  incidenceSettings:
+    cleanWindow: 0
+    startWith: start
+    startOffset:
+    - 1
+    - 1
+    endsWith: start
+    endOffset:
+    - 7
+    - 30
+  outputFolder: 06_incidenceAnalysis
