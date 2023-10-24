@@ -134,8 +134,10 @@ generateIncidenceAnalysis <- function(con,
   executeResults <- CohortIncidence::executeAnalysis(
     connection = con,
     incidenceDesign = irDesign,
-    buildOptions = buildOptions)
-
+    buildOptions = buildOptions) %>%
+    dplyr::mutate(database = executionSettings$databaseName)
+  
+  names(executeResults) <- tolower(names(executeResults))
 
   verboseSave(
     object = executeResults,

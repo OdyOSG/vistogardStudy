@@ -272,7 +272,8 @@ executeConditionRollup <- function(con,
                                                     databaseId = databaseId,
                                                     timeA = ..3,
                                                     timeB = ..4)
-  )
+  ) %>%
+    dplyr::mutate(database = executionSettings$databaseName)
 
   # Output file name
   saveName <- paste0("condition_chapters_", type)

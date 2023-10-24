@@ -9,12 +9,12 @@ source("analysis/private/_utilities.R")
 
 # Time To Covariate -----------
 timeToCovariate <- function(con,
-                             cohortDatabaseSchema,
-                             cohortTable,
-                             cohortKey,
-                             covariateKey,
-                             database,
-                             outputFolder) {
+                            cohortDatabaseSchema,
+                            cohortTable,
+                            cohortKey,
+                            covariateKey,
+                            database,
+                            outputFolder) {
   
   cli::cat_rule("Calculate time to covariate")
   
@@ -66,6 +66,8 @@ timeToCovariate <- function(con,
   # Run query on connection
   tb <- DatabaseConnector::querySql(connection = con, sql = cohortCovariateSql)
   names(tb) <- tolower(names(tb))
+  tb <- tb %>%
+    dplyr::mutate(database = executionSettings$databaseName)
   
   # Save results
   verboseSave(

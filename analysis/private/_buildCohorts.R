@@ -60,10 +60,10 @@ generateCohorts <- function(executionSettings,
                             type = "analysis") {
 
 
-  # prep cohorts for generator
+  # Prep cohorts for generator
   cohortsToCreate <- prepManifestForCohortGenerator(cohortManifest)
 
-  #path for incremental
+  # Path for incremental
   incrementalFolder <- fs::path(outputFolder)
 
 
@@ -76,7 +76,7 @@ generateCohorts <- function(executionSettings,
                            cohortSummaryStatsTable = paste0(name, "_summary_stats"),
                            cohortCensorStatsTable = paste0(name, "_censor_stats"))
 
-  #generate cohorts
+  # Generate cohorts
   CohortGenerator::generateCohortSet(
     connection = con,
     cdmDatabaseSchema = executionSettings$cdmDatabaseSchema,
@@ -87,7 +87,7 @@ generateCohorts <- function(executionSettings,
     incrementalFolder = incrementalFolder
   )
 
-  #get cohort counts
+  # Get cohort counts
   cohortCounts <- CohortGenerator::getCohortCounts(
     connection = con,
     cohortDatabaseSchema = executionSettings$workDatabaseSchema,
@@ -96,7 +96,7 @@ generateCohorts <- function(executionSettings,
   ) %>%
     dplyr::select(cohortId, cohortName, cohortEntries, cohortSubjects)
 
-  # save generated cohorts
+  # Save generated cohorts
   tb <- cohortManifest %>%
     dplyr::left_join(cohortCounts %>%
                        dplyr::select(cohortId, cohortEntries, cohortSubjects),
@@ -106,7 +106,8 @@ generateCohorts <- function(executionSettings,
       subjects = cohortSubjects) %>%
     dplyr::select(
       id, name, type, entries, subjects, file
-    )
+    ) %>%
+    dplyr::mutate(database = executionSettings$databaseName)
 
   savePath <- fs::path(outputFolder, "cohortManifest.csv")
   readr::write_csv(x = tb, file = savePath)

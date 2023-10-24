@@ -233,7 +233,8 @@ lengthOfStayAnalysis <- function(con,
       ),
       timeWindow = paste0(abs(timeA), "_", abs(timeB))
     ) %>%
-    dplyr::select(cohortDefinitionId, covariateName, visitConceptId, timeWindow, conceptName, min:max)
+    dplyr::select(cohortDefinitionId, covariateName, visitConceptId, timeWindow, conceptName, min:max)%>%
+    dplyr::mutate(database = executionSettings$databaseName)
   
   
   # Output file name

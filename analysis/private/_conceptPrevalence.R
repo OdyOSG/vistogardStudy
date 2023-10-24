@@ -97,7 +97,8 @@ getDrugsFE <- function(con,
     dplyr::select(cohortDefinitionId, analysisId, conceptId, name, n, pct) %>%
     dplyr::collect() %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
-                  timeWindow = paste0(abs(timeA), "_", abs(timeB)))
+                  timeWindow = paste0(abs(timeA), "_", abs(timeB)),
+                  database = executionSettings$databaseName)
   
   # Output file name
   saveName <- paste0("drugs_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB))
@@ -151,7 +152,8 @@ getConditionsFE <- function(con,
     dplyr::select(cohortDefinitionId, analysisId, conceptId, name, n, pct) %>%
     dplyr::collect() %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
-                  timeWindow = paste0(abs(timeA), "_", abs(timeB)))
+                  timeWindow = paste0(abs(timeA), "_", abs(timeB)),
+                  database = executionSettings$databaseName)
   
   # Output file name
   saveName <- paste0("conditions_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB))
@@ -205,7 +207,8 @@ getProceduresFE <- function(con,
     dplyr::select(cohortDefinitionId, analysisId, conceptId, name, n, pct) %>%
     dplyr::collect() %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
-                  timeWindow = paste0(abs(timeA), "_", abs(timeB)))
+                  timeWindow = paste0(abs(timeA), "_", abs(timeB)),
+                  database = executionSettings$databaseName)
   
   # Output file name
   saveName <- paste0("procedures_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB))
@@ -268,7 +271,8 @@ getVisitsFE <- function(con,
     dplyr::select(-covariateId) %>%
     dplyr::collect() %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
-                  timeWindow = paste0(abs(timeA), "_", abs(timeB)))
+                  timeWindow = paste0(abs(timeA), "_", abs(timeB)),
+                  database = executionSettings$databaseName)
   
   
   # Output file name
@@ -323,7 +327,8 @@ getObservationsFE <- function(con,
     dplyr::select(cohortDefinitionId, analysisId, conceptId, name, n, pct) %>%
     dplyr::collect() %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
-                  timeWindow = paste0(abs(timeA), "_", abs(timeB)))
+                  timeWindow = paste0(abs(timeA), "_", abs(timeB)),
+                  database = executionSettings$databaseName)
   
   
   # Output file name
@@ -393,9 +398,10 @@ getCohortFE <- function(con,
       name = covariateName  
     ) %>%
     dplyr::collect() %>%
-    dplyr::select(-covariateId) %>%
+    #dplyr::select(-covariateId) %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
-                  timeWindow = paste0(abs(timeA), "_", abs(timeB)))
+                  timeWindow = paste0(abs(timeA), "_", abs(timeB)),
+                  database = executionSettings$databaseName)
   
   
   # Output file name
@@ -448,7 +454,8 @@ getDemographicsFE <- function(con,
       name = covariateName
     ) %>%
     dplyr::select(-covariateId) %>%
-    dplyr::collect()
+    dplyr::collect() %>%
+    dplyr::mutate(database = executionSettings$databaseName)
   
   # Output file name
   saveName <- paste0("demographics_baseline_", cohortId)
@@ -507,7 +514,8 @@ getContinuousFE <- function(con,
     ) %>%
     dplyr::select(-covariateId) %>%
     dplyr::collect() %>%
-    dplyr::mutate(name = gsub(".*: ", "", name))
+    dplyr::mutate(name = gsub(".*: ", "", name),
+                  database = executionSettings$databaseName)
   
   
   # Output file name
