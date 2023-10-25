@@ -2,23 +2,25 @@
   "ConceptSets": [
     {
       "id": 0,
-      "name": "reaction",
+      "name": "Cardiac Assist Procedures",
       "expression": {
         "items": [
           {
             "concept": {
-              "CONCEPT_CLASS_ID": "Clinical Finding",
-              "CONCEPT_CODE": "281647001",
-              "CONCEPT_ID": 4105886,
-              "CONCEPT_NAME": "Adverse reaction",
-              "DOMAIN_ID": "Condition",
+              "CONCEPT_ID": 45888564,
+              "CONCEPT_NAME": "Cardiac Assist Procedures",
+              "STANDARD_CONCEPT": "C",
+              "STANDARD_CONCEPT_CAPTION": "Classification",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "SNOMED"
+              "CONCEPT_CODE": "1006339",
+              "DOMAIN_ID": "Procedure",
+              "VOCABULARY_ID": "CPT4",
+              "CONCEPT_CLASS_ID": "CPT4 Hierarchy"
             },
-            "includeDescendants": true
+            "isExcluded": false,
+            "includeDescendants": true,
+            "includeMapped": false
           }
         ]
       }
@@ -27,7 +29,7 @@
   "PrimaryCriteria": {
     "CriteriaList": [
       {
-        "ConditionOccurrence": {
+        "ProcedureOccurrence": {
           "CodesetId": 0
         }
       }
