@@ -12,16 +12,16 @@ library(keyring)
 
 ## B) Set Parameters ------------
 
-configBlock <- "cprdGold" # name of config block
+configBlock <- "[Add config block]" # name of config block
 
-database <- "cprdGold" # the name of the database in the config block
+database <- "[Add database]" # the name of the database in the config block
 
-keyringName <- "ehden_hmb" # the name of the keyring
+keyringName <- "vistogardStudy" # the name of the keyring
 
 keyringPassword <- "ohdsi" # password for keyring
 # This password is simply to avoid a prompt when creating the keyring
 
-## c) Check or create Config File------------------------
+## C) Check or create Config File------------------------
 
 # check if config.yml file exists, make it if it does not exist
 checkConfig()
@@ -40,13 +40,14 @@ setMultipleCredentials(
   keyringPassword = keyringPassword,
   forceCheck = TRUE
 )
+
 # If a single credential is incorrect, change it
-setCredential(cred = "vocabDatabaseSchema",
-                      db = configBlock,
-                      keyringName = keyringName,
-                      keyringPassword = keyringPassword,
-                      forceCheck = TRUE
-)
+# setCredential(cred = "dbms",
+#                       db = configBlock,
+#                       keyringName = keyringName,
+#                       keyringPassword = keyringPassword,
+#                       forceCheck = TRUE
+# )
 
 ## E) Check (Optional) -----------------------
 
@@ -61,8 +62,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
 connectionDetails$dbms
 
 
-
-# G) Close out ------------------------
+## G) Session Info ------------------------
 
 sessioninfo::session_info()
 rm(list=ls())
