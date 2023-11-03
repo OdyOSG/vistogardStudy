@@ -53,11 +53,18 @@ write_yaml(ll, file = here::here("analysis/settings/baselineCharacteristics.yml"
 
 ## 2. Post-index Utilization----------------------
 
+outcomeCohorts <- cohortManifest %>%
+  dplyr::filter(type == "outcomes") %>%
+  dplyr::mutate(id = as.integer(id)) %>%
+  dplyr::select(name, id) %>%
+  dplyr::rename(outcomeId = id,
+                outcomeName = name)
+
 ll <- list(
   'postIndexPrevalence' = list(
     'cohorts' = list(
       'targetCohorts' = targetCohorts,
-      'covariateCohorts' = covariateCohorts
+      'outcomeCohorts' = outcomeCohorts
     ),
     'timeWindow' = tibble::tibble(
       startDay = c(1L, 1L, 1L),
@@ -92,12 +99,12 @@ write_yaml(ll, file = here::here("analysis/settings/hcruCharacteristics.yml"), c
 ## 4. Incidence analysis---------------------------
 
 denomCohorts <- cohortManifest %>%
-  dplyr::filter(type == "outcomes" | id %in% c(1)) %>%
+  dplyr::filter(id %in% c(1,2)) %>%
   dplyr::mutate(id = as.integer(id)) %>%
   dplyr::select(name, id)
 
 numerCohorts <- cohortManifest %>%
-  dplyr::filter(type %in% c("drugs", "outcomes")) %>%
+  dplyr::filter(id %in% c(2,3)) %>%
   dplyr::mutate(id = as.integer(id)) %>%
   dplyr::select(name, id) 
 
@@ -111,9 +118,9 @@ ll <- list(
     'incidenceSettings' = list(
       'cleanWindow' = 0L,
       'startWith' = 'start',
-      'startOffset' = c(1L, 1L),
+      'startOffset' = c(0L, 0L, 0L, 5L, 0L),
       'endsWith' = 'start',
-      'endOffset' = c(7L, 30L)
+      'endOffset' = c(4L, 7L, 14L, 9999L, 9999L)
     ),
     'outputFolder' = fs::path("06_incidenceAnalysis")
   )

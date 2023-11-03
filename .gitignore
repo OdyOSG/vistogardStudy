@@ -5,6 +5,7 @@ errorReportSql.txt
 misc/
 report/
 reportFiles.zip
+cohortsToCreate_old/
 
 # History files
 .Rhistory
