@@ -16,7 +16,7 @@ source("analysis/private/_conditionRollup.R")
 
 # Set connection Block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 # Provide connection details
@@ -43,13 +43,15 @@ analysisSettings <- readSettingsFile(here::here("analysis/settings/baselineChara
 
 # E. Script --------------------
 
-startSnowflakeSession(con, executionSettings)
-
-
 # Run concept characterization
 
 executeConceptCharacterization(con = con,
                                type = "baseline",
+                               runDrugs = TRUE,
+                               runConditions = TRUE,
+                               runDemographics = TRUE,
+                               runContinuous = TRUE,
+                               runCohorts = TRUE,
                                executionSettings = executionSettings,
                                analysisSettings = analysisSettings)
 
@@ -60,8 +62,6 @@ executeConditionRollup(con = con,
                        type = "baseline",
                        executionSettings = executionSettings,
                        analysisSettings = analysisSettings)
-
-
 
 
 # F. Session Info ------------------------

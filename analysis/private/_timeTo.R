@@ -16,7 +16,7 @@ timeToCovariate <- function(con,
                             database,
                             outputFolder) {
   
-  cli::cat_rule("Calculate time to covariate")
+  cli::cat_rule("Calculating time to covariate")
   
   targetId <- cohortKey$targetId
   eventId <- covariateKey$covariateId
@@ -82,7 +82,6 @@ timeToCovariate <- function(con,
 
 # Time to covariate module -------------
 
-
 executeTimeToCovariate <- function(con,
                                    executionSettings,
                                    analysisSettings) {
@@ -103,21 +102,15 @@ executeTimeToCovariate <- function(con,
   cohortId <- cohortKey$targetId
   covId <- covariateKey$covariateId
   
-  # Time Windows
-  timeA <- analysisSettings[[1]]$timeWindow$startDay
-  timeB <- analysisSettings[[1]]$timeWindow$endDay
-
   
   # Job Log
   cli::cat_boxx("Building Time-To Covariates")
   cli::cat_line()
   
   tik <- Sys.time()
-  
-  cli::cat_bullet("Running Post-Index Analysis at window: [", crayon::green(timeA), " - ", crayon::green(timeB), "]",
-                  bullet = "info", bullet_col = "blue")
+
   cat_cohortId <- paste(cohortId, collapse = ", ")
-  cli::cat_bullet("Building time-to for cohort ids:\n   ",crayon::green(cat_cohortId),
+  cli::cat_bullet("Building time-to covariate for cohort ids:\n   ",crayon::green(cat_cohortId),
                   bullet = "info", bullet_col = "blue")
   cat_cohortId <- paste(covId, collapse = ", ")
   cli::cat_bullet("Using covariate cohorts ids:\n   ", crayon::green(cat_cohortId),

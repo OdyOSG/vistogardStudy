@@ -12,11 +12,12 @@ source("analysis/private/_utilities.R")
 source("analysis/private/_hcru.R")
 source("analysis/private/_timeTo.R")
 
+
 # C. Connection ----------------------
 
 # Set connection Block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 # Provide connection details
@@ -38,25 +39,23 @@ executionSettings <- config::get(config = configBlock) %>%
   purrr::discard_at(c("dbms", "user", "password", "connectionString"))
 
 ### Analysis Settings
-analysisSettings <- readSettingsFile(here::here("analysis/settings/hcruCharacteristics.yml"))
+analysisSettings1 <- readSettingsFile(here::here("analysis/settings/hcruCharacteristics.yml"))
+analysisSettings2 <- readSettingsFile(here::here("analysis/settings/timeToAnalysis.yml"))
 
 
 # E. Script --------------------
-
-startSnowflakeSession(con, executionSettings)
-
 
 # Run HCRU analysis
 
 executeHcruAnalysis(con = con,
                     executionSettings = executionSettings,
-                    analysisSettings = analysisSettings)
+                    analysisSettings = analysisSettings1)
 
 # Run Time-To analysis
 
 executeTimeToCovariate(con = con,
                        executionSettings = executionSettings,
-                       analysisSettings = analysisSettings)
+                       analysisSettings = analysisSettings2)
 
 
 # F. Session Info ------------------------

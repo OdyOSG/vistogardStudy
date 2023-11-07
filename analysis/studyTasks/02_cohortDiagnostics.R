@@ -11,11 +11,12 @@ library(config)
 source("analysis/private/_buildCohorts.R")
 source("analysis/private/_utilities.R")
 
+
 # C. Connection ----------------------
 
 # set connection Block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 # provide connection details
@@ -28,6 +29,7 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
 
 #connect to database
 con <- DatabaseConnector::connect(connectionDetails)
+
 
 # D. Study Variables -----------------------
 
@@ -43,10 +45,8 @@ outputFolder <- here::here("results") %>%
 diagCohorts <- getCohortManifest() %>%
   dplyr::filter(type == "target")
 
+
 # E. Script --------------------
-
-startSnowflakeSession(con, executionSettings)
-
 
 # Run cohort diagnostics
 
@@ -54,7 +54,6 @@ runCohortDiagnostics(executionSettings = executionSettings,
                      con = con,
                      cohortManifest = diagCohorts,
                      outputFolder = outputFolder)
-
 
 
 # F. Session Info ------------------------

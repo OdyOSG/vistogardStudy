@@ -2,15 +2,15 @@
   "ConceptSets": [
     {
       "id": 0,
-      "name": "transfusion_of_blood_product",
+      "name": "echocardiogram",
       "expression": {
         "items": [
           {
             "concept": {
               "CONCEPT_CLASS_ID": "Procedure",
-              "CONCEPT_CODE": "116859006",
-              "CONCEPT_ID": 4024656,
-              "CONCEPT_NAME": "Transfusion of blood product",
+              "CONCEPT_CODE": "40701008",
+              "CONCEPT_ID": 4230911,
+              "CONCEPT_NAME": "Echocardiography",
               "DOMAIN_ID": "Procedure",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",

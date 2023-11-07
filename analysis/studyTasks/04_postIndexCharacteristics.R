@@ -12,11 +12,12 @@ source("analysis/private/_utilities.R")
 source("analysis/private/_conceptPrevalence.R")
 source("analysis/private/_conditionRollup.R")
 
+
 # C. Connection ----------------------
 
 # Set connection Block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 # Provide connection details
@@ -43,23 +44,14 @@ analysisSettings <- readSettingsFile(here::here("analysis/settings/postIndexChar
 
 # E. Script --------------------
 
-startSnowflakeSession(con, executionSettings)
-
-
 # Run concept characterization
 
 executeConceptCharacterization(con = con,
                                type = "postIndex",
+                               runVisits = TRUE,
+                               runCohorts = TRUE,
                                executionSettings = executionSettings,
                                analysisSettings = analysisSettings)
-
-
-# Run ICD chapters rollup
-
-executeConditionRollup(con = con,
-                       type = "postIndex",
-                       executionSettings = executionSettings,
-                       analysisSettings = analysisSettings)
 
 
 # F. Session Info ------------------------

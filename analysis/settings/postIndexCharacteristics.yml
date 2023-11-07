@@ -7,48 +7,66 @@ postIndexPrevalence:
       targetId: 2
     - targetName: patients_toxicity_5fu
       targetId: 3
-    covariateCohorts:
-    - covariateName: all_cancer
-      covariateId: 4
-    - covariateName: atrial_fibrillation
-      covariateId: 5
-    - covariateName: bladder_cancer
-      covariateId: 6
-    - covariateName: breast_cancer
-      covariateId: 7
-    - covariateName: cardiomyopathy
-      covariateId: 8
-    - covariateName: cervix_cancer
-      covariateId: 9
-    - covariateName: chronic_kidney_disease
-      covariateId: 10
-    - covariateName: colorectal_cancer
-      covariateId: 11
-    - covariateName: coronary_artery_disease
-      covariateId: 12
-    - covariateName: esophagial_cancer
-      covariateId: 13
-    - covariateName: gastric_cancer
-      covariateId: 14
-    - covariateName: head_neck_cancer
-      covariateId: 15
-    - covariateName: heart_failure
-      covariateId: 16
-    - covariateName: hyperthyroidism
-      covariateId: 17
-    - covariateName: myocardial_infarction
-      covariateId: 18
-    - covariateName: pancreas_cancer
-      covariateId: 19
-    - covariateName: renal_failure
-      covariateId: 20
-    - covariateName: type_2_diabetes
-      covariateId: 21
+    outcomeCohorts:
+    - outcomeName: antianxiety_medication
+      outcomeId: 22
+    - outcomeName: antiarrhythmics
+      outcomeId: 23
+    - outcomeName: antibiotics_antifungal_medication
+      outcomeId: 24
+    - outcomeName: antidiarrheal_drugs
+      outcomeId: 25
+    - outcomeName: antiepileptics
+      outcomeId: 26
+    - outcomeName: blood_transfusion
+      outcomeId: 27
+    - outcomeName: cardiac_devices
+      outcomeId: 28
+    - outcomeName: cardiac_enzymes
+      outcomeId: 29
+    - outcomeName: cardiac_icu
+      outcomeId: 30
+    - outcomeName: cardiopulmonary_resuscitation
+      outcomeId: 31
+    - outcomeName: corticosteroids
+      outcomeId: 32
+    - outcomeName: ct_scan
+      outcomeId: 33
+    - outcomeName: defibrilation
+      outcomeId: 34
+    - outcomeName: diuretics
+      outcomeId: 35
+    - outcomeName: ecgs
+      outcomeId: 36
+    - outcomeName: echocardiogram
+      outcomeId: 37
+    - outcomeName: inotropic_medication
+      outcomeId: 38
+    - outcomeName: intubation_and_ventilation
+      outcomeId: 39
+    - outcomeName: lactulose
+      outcomeId: 40
+    - outcomeName: mri
+      outcomeId: 41
+    - outcomeName: nystatin
+      outcomeId: 42
+    - outcomeName: pain_medication
+      outcomeId: 43
+    - outcomeName: parenteral_nutrition
+      outcomeId: 44
+    - outcomeName: sucralfate
+      outcomeId: 45
+    - outcomeName: vasodilators
+      outcomeId: 46
+    - outcomeName: vasopressors
+      outcomeId: 47
   timeWindow:
+  - startDay: 0
+    endDay: 0
   - startDay: 1
     endDay: 7
   - startDay: 1
     endDay: 30
   - startDay: 1
-    endDay: 183
+    endDay: 90
   outputFolder: 04_postIndexCharacteristics

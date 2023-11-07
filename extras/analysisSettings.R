@@ -67,8 +67,8 @@ ll <- list(
       'outcomeCohorts' = outcomeCohorts
     ),
     'timeWindow' = tibble::tibble(
-      startDay = c(1L, 1L, 1L),
-      endDay = c(7L, 30L, 183L)
+      startDay = c(0L, 1L, 1L, 1L),
+      endDay = c(0L, 7L, 30L, 90L)
     ),
     'outputFolder' = fs::path("04_postIndexCharacteristics")
   )
@@ -96,20 +96,51 @@ ll <- list(
 write_yaml(ll, file = here::here("analysis/settings/hcruCharacteristics.yml"), column.major = FALSE)
 
 
-## 4. Incidence analysis---------------------------
+## 4. Time-to analysis---------------------------
+
+targetCohorts <- cohortManifest %>%
+  dplyr::filter(type == "target" & id == 3L) %>%
+  dplyr::select(name, id) %>%
+  dplyr::rename(targetId = id,
+                targetName = name)
+
+covariateCohorts <- cohortManifest %>%
+  dplyr::filter(type == "target" & id == 2L) %>%
+  dplyr::mutate(id = as.integer(id)) %>%
+  dplyr::select(name, id) %>%
+  dplyr::rename(covariateId = id,
+                covariateName = name)
+
+ll <- list(
+  'hcruAnalysis' = list(
+    'cohorts' = list(
+      'targetCohorts' = targetCohorts,
+      'covariateCohorts' = covariateCohorts    
+    ),
+    'outputFolder' = fs::path("05_hcruCharacteristics")
+  )
+)
+
+write_yaml(ll, file = here::here("analysis/settings/timeToAnalysis.yml"), column.major = FALSE)
+
+
+## 5. Incidence analysis---------------------------
+
+
+### Analysis: Numerator cohort 2
 
 denomCohorts <- cohortManifest %>%
-  dplyr::filter(id %in% c(1,2)) %>%
+  dplyr::filter(id %in% c(1)) %>%
   dplyr::mutate(id = as.integer(id)) %>%
   dplyr::select(name, id)
 
 numerCohorts <- cohortManifest %>%
-  dplyr::filter(id %in% c(2,3)) %>%
+  dplyr::filter(id %in% c(2)) %>%
   dplyr::mutate(id = as.integer(id)) %>%
   dplyr::select(name, id) 
 
 
-ll <- list(
+ll1 <- list(
   'incidenceAnalysis' = list(
     'cohorts' = list(
       'denominator' = denomCohorts,
@@ -118,13 +149,46 @@ ll <- list(
     'incidenceSettings' = list(
       'cleanWindow' = 0L,
       'startWith' = 'start',
-      'startOffset' = c(0L, 0L, 0L, 5L, 0L),
+      'startOffset' = c(0L, 0L),
       'endsWith' = 'start',
-      'endOffset' = c(4L, 7L, 14L, 9999L, 9999L)
+      'endOffset' = c(7L, 14L)
     ),
-    'outputFolder' = fs::path("06_incidenceAnalysis")
+    'outputFolder' = fs::path("06_incidenceAnalysis/analysis1")
   )
 )
 
-write_yaml(ll, file = here::here("analysis/settings/incidenceAnalysis.yml"), column.major = FALSE)
+write_yaml(ll1, file = here::here("analysis/settings/incidenceAnalysis1.yml"), column.major = FALSE)
+
+
+### Analysis: Numerator cohort 3
+
+denomCohorts <- cohortManifest %>%
+  dplyr::filter(id %in% c(2)) %>%
+  dplyr::mutate(id = as.integer(id)) %>%
+  dplyr::select(name, id)
+
+numerCohorts <- cohortManifest %>%
+  dplyr::filter(id %in% c(3)) %>%
+  dplyr::mutate(id = as.integer(id)) %>%
+  dplyr::select(name, id) 
+
+
+ll2 <- list(
+  'incidenceAnalysis' = list(
+    'cohorts' = list(
+      'denominator' = denomCohorts,
+      'numerator' = numerCohorts
+    ),
+    'incidenceSettings' = list(
+      'cleanWindow' = 0L,
+      'startWith' = 'start',
+      'startOffset' = c(0L, 4L, 0L),
+      'endsWith' = 'start',
+      'endOffset' = c(4L, 9999L, 9999L)
+    ),
+    'outputFolder' = fs::path("06_incidenceAnalysis/analysis2")
+  )
+)
+
+write_yaml(ll2, file = here::here("analysis/settings/incidenceAnalysis2.yml"), column.major = FALSE)
 

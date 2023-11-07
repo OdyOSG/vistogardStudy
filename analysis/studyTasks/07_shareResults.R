@@ -12,7 +12,7 @@ source("analysis/private/_utilities.R")
 
 # Set database name
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 

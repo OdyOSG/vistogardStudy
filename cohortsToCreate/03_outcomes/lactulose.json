@@ -2,21 +2,21 @@
   "ConceptSets": [
     {
       "id": 0,
-      "name": "transfusion_of_blood_product",
+      "name": "lactulose",
       "expression": {
         "items": [
           {
             "concept": {
-              "CONCEPT_CLASS_ID": "Procedure",
-              "CONCEPT_CODE": "116859006",
-              "CONCEPT_ID": 4024656,
-              "CONCEPT_NAME": "Transfusion of blood product",
-              "DOMAIN_ID": "Procedure",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "CONCEPT_CODE": "6218",
+              "CONCEPT_ID": 987245,
+              "CONCEPT_NAME": "lactulose",
+              "DOMAIN_ID": "Drug",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "SNOMED"
+              "VOCABULARY_ID": "RxNorm"
             },
             "includeDescendants": true
           }
@@ -27,7 +27,7 @@
   "PrimaryCriteria": {
     "CriteriaList": [
       {
-        "ProcedureOccurrence": {
+        "DrugExposure": {
           "CodesetId": 0
         }
       }

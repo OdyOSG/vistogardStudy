@@ -16,7 +16,7 @@ source("analysis/private/_buildCohorts.R")
 
 # Set connection Block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 # Provide connection details
@@ -26,7 +26,6 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
   password = config::get("password", config = configBlock),
   connectionString = config::get("connectionString", config = configBlock)
 )
-
 
 # Connect to database
 con <- DatabaseConnector::connect(connectionDetails)
@@ -42,14 +41,11 @@ outputFolder <- here::here("results") %>%
   fs::path(executionSettings$databaseName, "01_buildCohorts") %>%
   fs::dir_create()
 
-
 ### Add study variables or load from settings
 cohortManifest <- getCohortManifest()
 
 
 # E. Script --------------------
-
-startSnowflakeSession(executionSettings = executionSettings, con = con)
 
 ### RUN ONCE - Initialize cohort table #########
 initializeCohortTables(executionSettings = executionSettings, con = con)
@@ -66,4 +62,3 @@ generatedCohorts <- generateCohorts(
 
 # F. Session Info ------------------------
 DatabaseConnector::disconnect(con)
-

@@ -16,7 +16,7 @@ source("analysis/private/_incidenceAnalysis.R")
 
 # Set connection Block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 # Provide connection details
@@ -38,19 +38,21 @@ executionSettings <- config::get(config = configBlock) %>%
   purrr::discard_at(c("dbms", "user", "password", "connectionString"))
 
 ### Analysis Settings
-analysisSettings <- readSettingsFile(here::here("analysis/settings/incidenceAnalysis.yml"))
+analysisSettings1 <- readSettingsFile(here::here("analysis/settings/incidenceAnalysis1.yml"))
+analysisSettings2 <- readSettingsFile(here::here("analysis/settings/incidenceAnalysis2.yml"))
 
 
 # E. Script --------------------
-
-startSnowflakeSession(con, executionSettings)
-
 
 ## Get Baseline Covariates
 
 executeIncidenceAnalysis(con = con,
                          executionSettings = executionSettings,
-                         analysisSettings = analysisSettings)
+                         analysisSettings = analysisSettings1)
+
+executeIncidenceAnalysis(con = con,
+                         executionSettings = executionSettings,
+                         analysisSettings = analysisSettings2)
 
 
 # F. Session Info ------------------------

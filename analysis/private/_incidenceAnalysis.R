@@ -83,6 +83,7 @@ generateIncidenceAnalysis <- function(con,
                                       cohortName,
                                       denomCohorts,
                                       irSettings,
+                                      outputFolder,
                                       refId) {
 
 
@@ -92,7 +93,7 @@ generateIncidenceAnalysis <- function(con,
   cohortTable <- paste(executionSettings$workDatabaseSchema, executionSettings$cohortTable, sep = ".")
   databaseId <- executionSettings$databaseName
 
-  outputFolder <- fs::path(here::here("results"), databaseId, analysisSettings[[1]]$outputFolder) %>%
+  outputFolder <- fs::path(here::here("results"), databaseId, outputFolder) %>%
     fs::dir_create()
 
   timeMap <- tibble::tibble(
@@ -132,9 +133,10 @@ generateIncidenceAnalysis <- function(con,
 
 
   executeResults <- CohortIncidence::executeAnalysis(
-    connection = con,
-    incidenceDesign = irDesign,
-    buildOptions = buildOptions) %>%
+      connection = con,
+      incidenceDesign = irDesign,
+      buildOptions = buildOptions
+    ) %>%
     dplyr::mutate(database = executionSettings$databaseName)
   
   names(executeResults) <- tolower(names(executeResults))
@@ -155,10 +157,11 @@ executeIncidenceAnalysis <- function(con,
 
 
   # Get variables
-  targetCohortId <- analysisSettings$incidenceAnalysis$cohorts$denominator$id
+  targetCohortId <- analysisSettings$incidenceAnalysis$cohorts$numerator$id
   targetCohortName <- analysisSettings$incidenceAnalysis$cohorts$numerator$name
   denomCohorts <- analysisSettings$incidenceAnalysis$cohorts$denominator
   irSettings <- analysisSettings$incidenceAnalysis$incidenceSettings
+  outputFolder <- analysisSettings$incidenceAnalysis$outputFolder
 
   cli::cat_boxx("Building Incidence Analysis")
   cli::cat_line()
@@ -173,6 +176,7 @@ executeIncidenceAnalysis <- function(con,
       cohortName = targetCohortName[i],
       denomCohorts = denomCohorts,
       irSettings = irSettings,
+      outputFolder = outputFolder,
       refId = i
     )
   }
