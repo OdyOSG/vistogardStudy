@@ -1,16 +1,23 @@
 hcruAnalysis:
   cohorts:
     targetCohorts:
-    - targetName: hmb
-      targetId: 1
-    - targetName: hmb2
-      targetId: 2
-    covariateCohorts:
-    - covariateName: anxiety
-      covariateId: 3
-    - covariateName: t2dm
-      covariateId: 4
+    - targetName: patients_exposed_5fu
+      targetId: 1.0
+    - targetName: patients_exposed_vistogard_broad
+      targetId: 2.0
+    - targetName: patients_exposed_vistogard_narrow
+      targetId: 3.0
+    - targetName: patients_no_vistogard
+      targetId: 4.0
+    - targetName: patients_toxicity_5fu
+      targetId: 5.0
+    - targetName: earlyToxicity
+      targetId: 2011.0
+    - targetName: lateToxicity
+      targetId: 2001.0
   timeWindow:
+  - startDay: 0
+    endDay: 0
   - startDay: 1
     endDay: 7
   - startDay: 1

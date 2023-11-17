@@ -1,24 +1,26 @@
-# A. Meta Info -----------------------
+# A. File Info -----------------------
 
 # Name: Cohort Diagnostics
 
+
 # B. Dependencies ----------------------
 
+## Load libraries and scripts
 library(tidyverse, quietly = TRUE)
 library(DatabaseConnector)
 library(config)
-
 source("analysis/private/_buildCohorts.R")
 source("analysis/private/_utilities.R")
 
+
 # C. Connection ----------------------
 
-# set connection Block
+## Set connection block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
-# provide connection details
+## Provide connection details
 connectionDetails <- DatabaseConnector::createConnectionDetails(
   dbms = config::get("dbms", config = configBlock),
   user = config::get("user", config = configBlock),
@@ -26,12 +28,13 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
   connectionString = config::get("connectionString", config = configBlock)
 )
 
-#connect to database
+## Connect to database
 con <- DatabaseConnector::connect(connectionDetails)
+
 
 # D. Study Variables -----------------------
 
-### Administrative Variables
+## Administrative Variables
 executionSettings <- config::get(config = configBlock) %>%
   purrr::discard_at( c("dbms", "user", "password", "connectionString"))
 
@@ -39,22 +42,20 @@ outputFolder <- here::here("results") %>%
   fs::path(executionSettings$databaseName, "02_cohortDiagnostics") %>%
   fs::dir_create()
 
-### Add study variables or load from settings
+## Add study variables or load from settings
 diagCohorts <- getCohortManifest() %>%
   dplyr::filter(type == "target")
 
+
 # E. Script --------------------
 
-startSnowflakeSession(con, executionSettings)
 
-
-# Run cohort diagnostics
+## Run cohort diagnostics
 
 runCohortDiagnostics(executionSettings = executionSettings,
                      con = con,
                      cohortManifest = diagCohorts,
                      outputFolder = outputFolder)
-
 
 
 # F. Session Info ------------------------

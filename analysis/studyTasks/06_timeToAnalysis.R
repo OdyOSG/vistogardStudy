@@ -1,25 +1,26 @@
 # A. File Info -----------------------
 
-# Name: Incidence Analysis
+# Name: Time-To Covariate Analysis
+
 
 # B. Dependencies ----------------------
 
+## Load libraries and scripts
 library(tidyverse, quietly = TRUE)
 library(DatabaseConnector)
 library(config)
-
 source("analysis/private/_utilities.R")
-source("analysis/private/_incidenceAnalysis.R")
+source("analysis/private/_timeTo.R")
 
 
 # C. Connection ----------------------
 
-# Set connection Block
+## Set connection block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
-# Provide connection details
+## Provide connection details
 connectionDetails <- DatabaseConnector::createConnectionDetails(
   dbms = config::get("dbms",config = configBlock),
   user = config::get("user",config = configBlock),
@@ -27,30 +28,34 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
   connectionString = config::get("connectionString", config = configBlock)
 )
 
-# Connect to database
+## Connect to database
 con <- DatabaseConnector::connect(connectionDetails)
 
 
 # D. Variables -----------------------
 
-### Administrative Variables
+## Administrative Variables
 executionSettings <- config::get(config = configBlock) %>%
   purrr::discard_at(c("dbms", "user", "password", "connectionString"))
 
-### Analysis Settings
-analysisSettings <- readSettingsFile(here::here("analysis/settings/incidenceAnalysis.yml"))
+## Analysis Settings
+analysisSettings1 <- readSettingsFile(here::here("analysis/settings/timeToAnalysis1.yml"))
+analysisSettings2 <- readSettingsFile(here::here("analysis/settings/timeToAnalysis2.yml"))
 
 
 # E. Script --------------------
 
-startSnowflakeSession(con, executionSettings)
+## Run Time-To analysis (Vistogard)
 
+executeTimeToCovariate(con = con,
+                       executionSettings = executionSettings,
+                       analysisSettings = analysisSettings1)
 
-## Get Baseline Covariates
+## Run Time-To analysis (Next chemotherapy)
 
-executeIncidenceAnalysis(con = con,
-                         executionSettings = executionSettings,
-                         analysisSettings = analysisSettings)
+executeTimeToCovariate(con = con,
+                       executionSettings = executionSettings,
+                       analysisSettings = analysisSettings2)
 
 
 # F. Session Info ------------------------

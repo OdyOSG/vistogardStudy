@@ -1,15 +1,57 @@
 baselineCharacteristics:
   cohorts:
     targetCohorts:
-    - targetName: hmb
-      targetId: 1
-    - targetName: hmb2
-      targetId: 2
+    - targetName: patients_exposed_5fu
+      targetId: 1.0
+    - targetName: patients_exposed_vistogard_broad
+      targetId: 2.0
+    - targetName: patients_exposed_vistogard_narrow
+      targetId: 3.0
+    - targetName: patients_no_vistogard
+      targetId: 4.0
+    - targetName: patients_toxicity_5fu
+      targetId: 5.0
+    - targetName: earlyToxicity
+      targetId: 2011.0
+    - targetName: lateToxicity
+      targetId: 2001.0
     covariateCohorts:
-    - covariateName: anxiety
-      covariateId: 3
-    - covariateName: t2dm
-      covariateId: 4
+    - covariateName: all_cancer
+      covariateId: 6
+    - covariateName: atrial_fibrillation
+      covariateId: 7
+    - covariateName: bladder_cancer
+      covariateId: 8
+    - covariateName: breast_cancer
+      covariateId: 9
+    - covariateName: cardiomyopathy
+      covariateId: 10
+    - covariateName: cervix_cancer
+      covariateId: 11
+    - covariateName: chronic_kidney_disease
+      covariateId: 12
+    - covariateName: colorectal_cancer
+      covariateId: 13
+    - covariateName: coronary_artery_disease
+      covariateId: 14
+    - covariateName: esophagial_cancer
+      covariateId: 15
+    - covariateName: gastric_cancer
+      covariateId: 16
+    - covariateName: head_neck_cancer
+      covariateId: 17
+    - covariateName: heart_failure
+      covariateId: 18
+    - covariateName: hyperthyroidism
+      covariateId: 19
+    - covariateName: myocardial_infarction
+      covariateId: 20
+    - covariateName: pancreas_cancer
+      covariateId: 21
+    - covariateName: renal_failure
+      covariateId: 22
+    - covariateName: type_2_diabetes
+      covariateId: 23
   timeWindow:
   - startDay: -365
     endDay: -1

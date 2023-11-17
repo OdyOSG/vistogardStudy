@@ -2,30 +2,15 @@
   "ConceptSets": [
     {
       "id": 0,
-      "name": "[WHC] Benzodiazepines",
+      "name": "anyChemo",
       "expression": {
         "items": [
           {
             "concept": {
-              "CONCEPT_CLASS_ID": "ATC 4th",
-              "CONCEPT_CODE": "N05CD",
-              "CONCEPT_ID": 21604635,
-              "CONCEPT_NAME": "Benzodiazepine derivatives",
-              "DOMAIN_ID": "Drug",
-              "INVALID_REASON": "V",
-              "INVALID_REASON_CAPTION": "Valid",
-              "STANDARD_CONCEPT": "C",
-              "STANDARD_CONCEPT_CAPTION": "Classification",
-              "VOCABULARY_ID": "ATC"
-            },
-            "includeDescendants": true
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "ATC 4th",
-              "CONCEPT_CODE": "N05CF",
-              "CONCEPT_ID": 21604653,
-              "CONCEPT_NAME": "Benzodiazepine related drugs",
+              "CONCEPT_CLASS_ID": "ATC 2nd",
+              "CONCEPT_CODE": "L01",
+              "CONCEPT_ID": 21601387,
+              "CONCEPT_NAME": "ANTINEOPLASTIC AGENTS",
               "DOMAIN_ID": "Drug",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",
@@ -48,7 +33,7 @@
       }
     ],
     "ObservationWindow": {
-      "PriorDays": 365,
+      "PriorDays": 0,
       "PostDays": 0
     },
     "PrimaryCriteriaLimit": {
@@ -69,19 +54,10 @@
       "Offset": 0
     }
   },
-  "CensoringCriteria": [
-    {
-      "VisitOccurrence": {
-        "Age": {
-          "Value": 65,
-          "Op": "gte"
-        }
-      }
-    }
-  ],
+  "CensoringCriteria": [],
   "CollapseSettings": {
     "CollapseType": "ERA",
-    "EraPad": 30
+    "EraPad": 0
   },
   "CensorWindow": {},
   "cdmVersionRange": ">=5.0.0"

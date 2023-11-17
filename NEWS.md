@@ -1,3 +1,9 @@
+# VISTOGARD v0.1.0
+
+* Added cohort definition JSONs (covariates, outcomes)
+* Edited analysis settings for all analyses according to protocol
+
+
 # VISTOGARD v0.0.2
 
 * Added 'database' column to output files

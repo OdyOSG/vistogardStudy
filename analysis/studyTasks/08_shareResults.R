@@ -1,18 +1,20 @@
-# A. Meta Info ----------------------
+# A. File Info ----------------------
 
-# Name: Build Cohorts
+# Name: Share Results
+
 
 # B. Dependencies ----------------------
 
+## Load libraries and scripts
 library(tidyverse, quietly = TRUE)
 library(DatabaseConnector)
 library(config)
-
 source("analysis/private/_utilities.R")
 
-# Set database name
+
+## Set connection block
 # <<<
-configBlock <- "optum"
+configBlock <- "[database]"
 # >>>
 
 

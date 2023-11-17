@@ -346,16 +346,16 @@ getObservationsFE <- function(con,
 
 
 getCohortFE <- function(con,
-                            cohortDatabaseSchema,
-                            cohortTable,
-                            cdmDatabaseSchema,
-                            cohortId,
-                            analysisSettings,
-                            covId,
-                            type = c("postIndex", "baseline"),
-                            timeA,
-                            timeB,
-                            outputFolder) {
+                        cohortDatabaseSchema,
+                        cohortTable,
+                        cdmDatabaseSchema,
+                        cohortId,
+                        analysisSettings,
+                        covId,
+                        type = c("postIndex", "baseline"),
+                        timeA,
+                        timeB,
+                        outputFolder) {
   
   cli::cat_rule("Build Cohort Covariates")
   
@@ -398,14 +398,13 @@ getCohortFE <- function(con,
       name = covariateName  
     ) %>%
     dplyr::collect() %>%
-    #dplyr::select(-covariateId) %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
                   timeWindow = paste0(abs(timeA), "_", abs(timeB)),
                   database = executionSettings$databaseName)
   
   
   # Output file name
-  saveName <- paste0("cohort_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB))
+  saveName <- paste0("cohort_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB), "_", covId)
   
   # Save results
   verboseSave(
@@ -483,6 +482,7 @@ getContinuousFE <- function(con,
   # Create Continuous settings
   covSettings <- FeatureExtraction::createCovariateSettings(
     useDemographicsAge = TRUE,
+    useCharlsonIndex = TRUE,
     useDemographicsPriorObservationTime = TRUE,
     useDemographicsPostObservationTime = TRUE,
     useDemographicsTimeInCohort = TRUE
@@ -536,6 +536,14 @@ getContinuousFE <- function(con,
 
 executeConceptCharacterization <- function(con,
                                            type = c("postIndex", "baseline"),
+                                           runDrugs = FALSE,
+                                           runConditions = FALSE,
+                                           runVisits = FALSE,
+                                           runDemographics = FALSE,
+                                           runContinuous = FALSE,
+                                           runProcedures = FALSE,
+                                           runObservations = FALSE,
+                                           runCohorts = FALSE,
                                            executionSettings,
                                            analysisSettings) {
   
@@ -544,7 +552,6 @@ executeConceptCharacterization <- function(con,
   workDatabaseSchema <- executionSettings$workDatabaseSchema
   cohortTable <- executionSettings$cohortTable
   databaseId <- executionSettings$databaseName
-  
   outputFolder <- fs::path(here::here("results"), databaseId, analysisSettings[[1]]$outputFolder) %>%
     fs::dir_create()
   
@@ -578,26 +585,34 @@ executeConceptCharacterization <- function(con,
   tik <- Sys.time()
   
   if (type == "baseline") {
+      
+      # Run Baseline Demographics 
+      if (runDemographics == TRUE) {
+      
+        purrr::pmap_dfr(cohortKey,
+                        ~ getDemographicsFE(con = con,
+                                            cdmDatabaseSchema = cdmDatabaseSchema,
+                                            cohortTable = cohortTable,
+                                            cohortDatabaseSchema = workDatabaseSchema,
+                                            cohortId = ..2,
+                                            outputFolder = outputFolder)
+        )
+      
+     }
     
-    # Run Baseline Demographics 
-    purrr::pmap_dfr(cohortKey,
-                    ~ getDemographicsFE(con = con,
+    # Run Baseline Continuous
+    if (runContinuous == TRUE) {
+      
+      purrr::pmap_dfr(cohortKey,
+                      ~ getContinuousFE(con = con,
                                         cdmDatabaseSchema = cdmDatabaseSchema,
                                         cohortTable = cohortTable,
                                         cohortDatabaseSchema = workDatabaseSchema,
                                         cohortId = ..2,
                                         outputFolder = outputFolder)
-    )
-    
-    # Run Baseline Continuous
-    purrr::pmap_dfr(cohortKey,
-                    ~ getContinuousFE(con = con,
-                                      cdmDatabaseSchema = cdmDatabaseSchema,
-                                      cohortTable = cohortTable,
-                                      cohortDatabaseSchema = workDatabaseSchema,
-                                      cohortId = ..2,
-                                      outputFolder = outputFolder)
-    )
+      )
+      
+    }
   }
   
   # Create grid df for execution
@@ -605,62 +620,29 @@ executeConceptCharacterization <- function(con,
                      timeA = timeA, 
                      timeB = timeB)
   
+
   # Run Drugs Covariates
-  purrr::pmap_dfr(grid,
-                  ~ getDrugsFE(con = con,
-                               cdmDatabaseSchema = cdmDatabaseSchema,
-                               cohortTable = cohortTable,
-                               cohortDatabaseSchema = workDatabaseSchema,
-                               type = type,
-                               cohortId = ..2,
-                               timeA = ..3,
-                               timeB = ..4,
-                               outputFolder = outputFolder)
-  )
+  if (runDrugs == TRUE) {
   
+    purrr::pmap_dfr(grid,
+                    ~ getDrugsFE(con = con,
+                                 cdmDatabaseSchema = cdmDatabaseSchema,
+                                 cohortTable = cohortTable,
+                                 cohortDatabaseSchema = workDatabaseSchema,
+                                 type = type,
+                                 cohortId = ..2,
+                                 timeA = ..3,
+                                 timeB = ..4,
+                                 outputFolder = outputFolder)
+    )
+    
+  }
   
   # Run Conditions Covariates
-  purrr::pmap_dfr(grid,
-                  ~ getConditionsFE(con = con,
-                                    cdmDatabaseSchema = cdmDatabaseSchema,
-                                    cohortTable = cohortTable,
-                                    cohortDatabaseSchema = workDatabaseSchema,
-                                    type = type,
-                                    cohortId = ..2,
-                                    timeA = ..3,
-                                    timeB = ..4,
-                                    outputFolder = outputFolder)
-  )
-  
-  # Run Visits Covariates
-  purrr::pmap_dfr(grid,
-                  ~ getVisitsFE(con = con,
-                                cdmDatabaseSchema = cdmDatabaseSchema,
-                                cohortTable = cohortTable,
-                                cohortDatabaseSchema = workDatabaseSchema,
-                                type = type,
-                                cohortId = ..2,
-                                timeA = ..3,
-                                timeB = ..4,
-                                outputFolder = outputFolder)
-  )
-  
-  # Run Procedures Covariates
-  purrr::pmap_dfr(grid,
-                  ~ getProceduresFE(con = con,
-                                    cdmDatabaseSchema = cdmDatabaseSchema,
-                                    cohortTable = cohortTable,
-                                    cohortDatabaseSchema = workDatabaseSchema,
-                                    type = type,
-                                    cohortId = ..2,
-                                    timeA = ..3,
-                                    timeB = ..4,
-                                    outputFolder = outputFolder)
-  )
-  
-  # Run Observations Covariates
-  purrr::pmap_dfr(grid,
-                  ~ getObservationsFE(con = con,
+  if (runConditions == TRUE) {
+    
+    purrr::pmap_dfr(grid,
+                    ~ getConditionsFE(con = con,
                                       cdmDatabaseSchema = cdmDatabaseSchema,
                                       cohortTable = cohortTable,
                                       cohortDatabaseSchema = workDatabaseSchema,
@@ -669,7 +651,60 @@ executeConceptCharacterization <- function(con,
                                       timeA = ..3,
                                       timeB = ..4,
                                       outputFolder = outputFolder)
-  )
+    )
+    
+  }
+    
+  # Run Visits Covariates
+  if (runVisits == TRUE) {
+    
+    purrr::pmap_dfr(grid,
+                    ~ getVisitsFE(con = con,
+                                  cdmDatabaseSchema = cdmDatabaseSchema,
+                                  cohortTable = cohortTable,
+                                  cohortDatabaseSchema = workDatabaseSchema,
+                                  type = type,
+                                  cohortId = ..2,
+                                  timeA = ..3,
+                                  timeB = ..4,
+                                  outputFolder = outputFolder)
+    )
+    
+  }
+  
+  # Run Procedures Covariates
+  if (runProcedures == TRUE) {
+    
+    purrr::pmap_dfr(grid,
+                    ~ getProceduresFE(con = con,
+                                      cdmDatabaseSchema = cdmDatabaseSchema,
+                                      cohortTable = cohortTable,
+                                      cohortDatabaseSchema = workDatabaseSchema,
+                                      type = type,
+                                      cohortId = ..2,
+                                      timeA = ..3,
+                                      timeB = ..4,
+                                      outputFolder = outputFolder)
+    )
+    
+  }
+  
+  # Run Observations Covariates
+  if (runObservations == TRUE) {
+    
+    purrr::pmap_dfr(grid,
+                    ~ getObservationsFE(con = con,
+                                        cdmDatabaseSchema = cdmDatabaseSchema,
+                                        cohortTable = cohortTable,
+                                        cohortDatabaseSchema = workDatabaseSchema,
+                                        type = type,
+                                        cohortId = ..2,
+                                        timeA = ..3,
+                                        timeB = ..4,
+                                        outputFolder = outputFolder)
+    )
+    
+  }
   
   
   # Create grid df for execution
@@ -679,19 +714,23 @@ executeConceptCharacterization <- function(con,
                       timeB = timeB)
   
   # Run Cohort Covariates
-  purrr::pmap_dfr(grid,
-                  ~ getCohortFE(con = con,
-                                    cdmDatabaseSchema = cdmDatabaseSchema,
-                                    cohortTable = cohortTable,
-                                    cohortDatabaseSchema = workDatabaseSchema,
-                                    analysisSettings = analysisSettings,
-                                    type = type,
-                                    covId = ..4,
-                                    cohortId = ..2,
-                                    timeA = ..5,
-                                    timeB = ..6,
-                                    outputFolder = outputFolder)
-  )
+  if (runCohorts == TRUE) {
+    
+    purrr::pmap_dfr(grid,
+                    ~ getCohortFE(con = con,
+                                  cdmDatabaseSchema = cdmDatabaseSchema,
+                                  cohortTable = cohortTable,
+                                  cohortDatabaseSchema = workDatabaseSchema,
+                                  analysisSettings = analysisSettings,
+                                  type = type,
+                                  covId = ..4,
+                                  cohortId = ..2,
+                                  timeA = ..5,
+                                  timeB = ..6,
+                                  outputFolder = outputFolder)
+    )
+    
+  }
   
   
   tok <- Sys.time()

@@ -1,0 +1,19 @@
+timeTo:
+  cohorts:
+    targetCohorts:
+    - targetName: patients_exposed_vistogard_broad
+      targetId: 2.0
+    - targetName: patients_exposed_vistogard_narrow
+      targetId: 3.0
+    - targetName: earlyToxicity
+      targetId: 2011.0
+    - targetName: lateToxicity
+      targetId: 2001.0
+    covariateCohorts:
+    - covariateName: 5fu
+      covariateId: 24
+    - covariateName: anyChemo
+      covariateId: 30
+    - covariateName: otherChemo
+      covariateId: 49
+  outputFolder: 06_timeTo
