@@ -1,6 +1,6 @@
 # A. File Info -----------------------
 
-# Name: Baseline Characteristics
+# Name: Incidence Analysis
 
 
 # B. Dependencies ----------------------
@@ -10,8 +10,7 @@ library(tidyverse, quietly = TRUE)
 library(DatabaseConnector)
 library(config)
 source("analysis/private/_utilities.R")
-source("analysis/private/_conceptPrevalence.R")
-source("analysis/private/_conditionRollup.R")
+source("analysis/private/_incidenceAnalysis.R")
 
 
 # C. Connection ----------------------
@@ -40,30 +39,21 @@ executionSettings <- config::get(config = configBlock) %>%
   purrr::discard_at(c("dbms", "user", "password", "connectionString"))
 
 ## Analysis Settings
-analysisSettings <- readSettingsFile(here::here("analysis/settings/baselineCharacteristics.yml"))
+analysisSettings1 <- readSettingsFile(here::here("analysis/settings/incidenceAnalysis1.yml"))
+analysisSettings2 <- readSettingsFile(here::here("analysis/settings/incidenceAnalysis2.yml"))
 
 
 # E. Script --------------------
 
-## Run concept characterization
+## Run Incidence Analysis
 
-executeConceptCharacterization(con = con,
-                               type = "baseline",
-                               runDrugs = TRUE,
-                               runConditions = TRUE,
-                               runDemographics = TRUE,
-                               runContinuous = TRUE,
-                               runCohorts = TRUE,
-                               executionSettings = executionSettings,
-                               analysisSettings = analysisSettings)
+executeIncidenceAnalysis(con = con,
+                         executionSettings = executionSettings,
+                         analysisSettings = analysisSettings1)
 
-
-## Run ICD chapters rollup
-
-executeConditionRollup(con = con,
-                       type = "baseline",
-                       executionSettings = executionSettings,
-                       analysisSettings = analysisSettings)
+executeIncidenceAnalysis(con = con,
+                         executionSettings = executionSettings,
+                         analysisSettings = analysisSettings2)
 
 
 # F. Session Info ------------------------

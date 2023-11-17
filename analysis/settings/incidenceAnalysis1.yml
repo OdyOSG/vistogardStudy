@@ -4,8 +4,8 @@ incidenceAnalysis:
     - name: patients_exposed_5fu
       id: 1
     numerator:
-    - name: patients_exposed_vistogard
-      id: 2
+    - name: patients_toxicity_5fu
+      id: 5
   incidenceSettings:
     cleanWindow: 0
     startWith: start
@@ -16,4 +16,4 @@ incidenceAnalysis:
     endOffset:
     - 7
     - 14
-  outputFolder: 06_incidenceAnalysis/analysis1
+  outputFolder: 07_incidenceAnalysis/analysis1

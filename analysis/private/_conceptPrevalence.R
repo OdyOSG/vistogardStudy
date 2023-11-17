@@ -346,16 +346,16 @@ getObservationsFE <- function(con,
 
 
 getCohortFE <- function(con,
-                            cohortDatabaseSchema,
-                            cohortTable,
-                            cdmDatabaseSchema,
-                            cohortId,
-                            analysisSettings,
-                            covId,
-                            type = c("postIndex", "baseline"),
-                            timeA,
-                            timeB,
-                            outputFolder) {
+                        cohortDatabaseSchema,
+                        cohortTable,
+                        cdmDatabaseSchema,
+                        cohortId,
+                        analysisSettings,
+                        covId,
+                        type = c("postIndex", "baseline"),
+                        timeA,
+                        timeB,
+                        outputFolder) {
   
   cli::cat_rule("Build Cohort Covariates")
   
@@ -398,14 +398,13 @@ getCohortFE <- function(con,
       name = covariateName  
     ) %>%
     dplyr::collect() %>%
-    #dplyr::select(-covariateId) %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
                   timeWindow = paste0(abs(timeA), "_", abs(timeB)),
                   database = executionSettings$databaseName)
   
   
   # Output file name
-  saveName <- paste0("cohort_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB))
+  saveName <- paste0("cohort_", type, "_", cohortId, "_", abs(timeA), "_", abs(timeB), "_", covId)
   
   # Save results
   verboseSave(
@@ -553,7 +552,6 @@ executeConceptCharacterization <- function(con,
   workDatabaseSchema <- executionSettings$workDatabaseSchema
   cohortTable <- executionSettings$cohortTable
   databaseId <- executionSettings$databaseName
-  
   outputFolder <- fs::path(here::here("results"), databaseId, analysisSettings[[1]]$outputFolder) %>%
     fs::dir_create()
   
@@ -720,16 +718,16 @@ executeConceptCharacterization <- function(con,
     
     purrr::pmap_dfr(grid,
                     ~ getCohortFE(con = con,
-                                      cdmDatabaseSchema = cdmDatabaseSchema,
-                                      cohortTable = cohortTable,
-                                      cohortDatabaseSchema = workDatabaseSchema,
-                                      analysisSettings = analysisSettings,
-                                      type = type,
-                                      covId = ..4,
-                                      cohortId = ..2,
-                                      timeA = ..5,
-                                      timeB = ..6,
-                                      outputFolder = outputFolder)
+                                  cdmDatabaseSchema = cdmDatabaseSchema,
+                                  cohortTable = cohortTable,
+                                  cohortDatabaseSchema = workDatabaseSchema,
+                                  analysisSettings = analysisSettings,
+                                  type = type,
+                                  covId = ..4,
+                                  cohortId = ..2,
+                                  timeA = ..5,
+                                  timeB = ..6,
+                                  outputFolder = outputFolder)
     )
     
   }

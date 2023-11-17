@@ -173,8 +173,9 @@ lengthOfStayAnalysis <- function(con,
   
   cli::cat_rule("Build Length of Stay Analysis")
   
-  # SQL to get length of stay
-  sql <- "
+  
+  # SQL to get length of stay (group by concept_id)
+  sql1 <- "
   SELECT b.cohort_definition_id, b.visit_concept_id,
     MIN(length_of_stay) AS min,
     percentile_cont(0.10) WITHIN GROUP (ORDER BY length_of_stay) AS p10,
@@ -206,13 +207,13 @@ lengthOfStayAnalysis <- function(con,
     ) v
     ON t.subject_id = v.person_id
     AND v.visit_start_date BETWEEN win_a AND win_b
-    WHERE v.visit_concept_id IN (9201)
+    WHERE v.visit_concept_id IN (9201, 262)
     ) b
     GROUP BY b.cohort_definition_id, b.visit_concept_id;
   "
   
-  losSql <- SqlRender::render(
-    sql,
+  losSql1 <- SqlRender::render(
+    sql1,
     cohortDatabaseSchema = cohortDatabaseSchema,
     cohortTable = cohortTable,
     cdmDatabaseSchema = cdmDatabaseSchema,
@@ -223,12 +224,70 @@ lengthOfStayAnalysis <- function(con,
     SqlRender::translate(targetDialect = con@dbms)
   
   # Format
-  losTbl <- DatabaseConnector::querySql(con, sql = losSql,
-                                        snakeCaseToCamelCase = TRUE) %>%
+  losTbl1 <- DatabaseConnector::querySql(con, sql = losSql1, snakeCaseToCamelCase = TRUE) 
+  
+  
+  # SQL to get length of stay (no grouping)
+  sql2 <- "
+  SELECT b.cohort_definition_id, 
+    0 as visit_concept_id ,
+    MIN(length_of_stay) AS min,
+    percentile_cont(0.10) WITHIN GROUP (ORDER BY length_of_stay) AS p10,
+    percentile_cont(0.25) WITHIN GROUP (ORDER BY length_of_stay) AS p25,
+    percentile_cont(0.50) WITHIN GROUP (ORDER BY length_of_stay) AS median,
+    percentile_cont(0.75) WITHIN GROUP (ORDER BY length_of_stay) AS p75,
+    percentile_cont(0.90) WITHIN GROUP (ORDER BY length_of_stay) AS p90,
+    STDDEV(length_of_stay) AS sd,
+    MAX(length_of_stay) AS max
+  FROM (
+    SELECT
+      t.cohort_definition_id, t.subject_id, t.cohort_start_date, t.cohort_end_date,
+      --v.visit_concept_id,
+      v.visit_start_date, v.visit_end_date,
+      CASE
+        WHEN v.visit_end_date > t.win_b THEN DATEDIFF(day, v.visit_start_date, t.win_b)
+        WHEN v.visit_start_date < t.win_a THEN DATEDIFF(day, t.win_a, v.visit_end_date)
+        ELSE DATEDIFF(day, v.visit_start_date, v.visit_end_date) END AS length_of_stay
+    FROM (
+      SELECT *,
+      DATEADD(day, @timeA, a.cohort_start_date) AS win_a,
+      DATEADD(day, @timeB, a.cohort_start_date) AS win_b
+      FROM @cohortDatabaseSchema.@cohortTable a
+      WHERE cohort_definition_id IN (@targetId)
+    ) t
+    JOIN (
+      SELECT *
+      FROM @cdmDatabaseSchema.visit_occurrence
+    ) v
+    ON t.subject_id = v.person_id
+    AND v.visit_start_date BETWEEN win_a AND win_b
+    WHERE v.visit_concept_id IN (9201, 262)
+    ) b
+    GROUP BY b.cohort_definition_id;
+  "
+  
+  losSql2 <- SqlRender::render(
+    sql2,
+    cohortDatabaseSchema = cohortDatabaseSchema,
+    cohortTable = cohortTable,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    targetId = cohortId,
+    timeA = timeA,
+    timeB = timeB
+  ) %>%
+    SqlRender::translate(targetDialect = con@dbms)
+
+  losTbl2 <- DatabaseConnector::querySql(con, sql = losSql2, snakeCaseToCamelCase = TRUE) 
+  
+  
+  # Format
+  losTbl <- rbind(losTbl1, losTbl2) %>%
     dplyr::mutate(
       covariateName = "Length of Stay",
       conceptName = dplyr::case_when(
         visitConceptId == 9201 ~ "Inpatient Visit",
+        visitConceptId == 262 ~ "Emergency Room and Inpatient Visit",
+        visitConceptId == 0 ~ "Hospitalization",
         TRUE ~ NA_character_
       ),
       timeWindow = paste0(abs(timeA), "_", abs(timeB))
@@ -261,7 +320,6 @@ executeHcruAnalysis <- function(con,
   workDatabaseSchema <- executionSettings$workDatabaseSchema
   cohortTable <- executionSettings$cohortTable
   databaseId <- executionSettings$databaseName
-  
   outputFolder <- fs::path(here::here("results"), databaseId, analysisSettings[[1]]$outputFolder) %>%
     fs::dir_create()
   

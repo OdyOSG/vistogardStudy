@@ -1,0 +1,9 @@
+strata:
+  cohorts:
+    targetCohorts:
+    - targetName: patients_exposed_vistogard_broad
+      targetId: 2
+    strataCohorts:
+    - strataName: patients_exposed_5fu
+      strataId: 1
+  outputFolder: 01_buildCohorts

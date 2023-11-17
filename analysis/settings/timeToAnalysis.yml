@@ -1,9 +1,0 @@
-hcruAnalysis:
-  cohorts:
-    targetCohorts:
-    - targetName: patients_toxicity_5fu
-      targetId: 3
-    covariateCohorts:
-    - covariateName: patients_exposed_vistogard
-      covariateId: 2
-  outputFolder: 05_hcruCharacteristics

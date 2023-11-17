@@ -1,4 +1,4 @@
-hcruAnalysis:
+timeTo:
   cohorts:
     targetCohorts:
     - targetName: patients_exposed_5fu
@@ -7,21 +7,15 @@ hcruAnalysis:
       targetId: 2.0
     - targetName: patients_exposed_vistogard_narrow
       targetId: 3.0
-    - targetName: patients_no_vistogard
-      targetId: 4.0
-    - targetName: patients_toxicity_5fu
-      targetId: 5.0
     - targetName: earlyToxicity
       targetId: 2011.0
     - targetName: lateToxicity
       targetId: 2001.0
-  timeWindow:
-  - startDay: 0
-    endDay: 0
-  - startDay: 1
-    endDay: 7
-  - startDay: 1
-    endDay: 30
-  - startDay: 1
-    endDay: 183
-  outputFolder: 05_hcruCharacteristics
+    covariateCohorts:
+    - covariateName: patients_exposed_5fu
+      covariateId: 1
+    - covariateName: patients_exposed_vistogard_broad
+      covariateId: 2
+    - covariateName: patients_exposed_vistogard_narrow
+      covariateId: 3
+  outputFolder: 06_timeTo

@@ -6,16 +6,10 @@
 # Description: The purpose of the _buildCohorts.R script is to
 # build cohort functions
 
+
 # B. Functions ------------------------
 
 initializeCohortTables <- function(executionSettings, con) {
-
-  # if (con@dbms == "snowflake") {
-  #   workSchema <- paste(executionSettings$workDatabase, executionSettings$workSchema, sep = ".")
-  # } else {
-  #   workSchema <- executionSettings$workSchema
-  # }
-  #
 
   name <- executionSettings$cohortTable
 
@@ -32,8 +26,8 @@ initializeCohortTables <- function(executionSettings, con) {
                                       cohortTableNames = cohortTableNames,
                                       incremental = TRUE)
   invisible(cohortTableNames)
-
 }
+
 
 prepManifestForCohortGenerator <- function(cohortManifest) {
 
@@ -49,7 +43,6 @@ prepManifestForCohortGenerator <- function(cohortManifest) {
     ~CirceR::buildCohortQuery(CirceR::cohortExpressionFromJson(.x),
                               CirceR::createGenerateOptions(generateStats = TRUE)))
   return(cohortsToCreate)
-
 }
 
 
@@ -58,7 +51,6 @@ generateCohorts <- function(executionSettings,
                             cohortManifest,
                             outputFolder,
                             type = "analysis") {
-
 
   # Prep cohorts for generator
   cohortsToCreate <- prepManifestForCohortGenerator(cohortManifest)
@@ -115,7 +107,6 @@ generateCohorts <- function(executionSettings,
                   bullet = "tick", bullet_col = "green")
 
   return(cohortCounts)
-
 }
 
 # Run Cohort Diagnostis

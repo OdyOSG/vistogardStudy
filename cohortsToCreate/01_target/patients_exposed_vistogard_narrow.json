@@ -1,6 +1,29 @@
 {
   "ConceptSets": [
     {
+      "id": 0,
+      "name": "Vistogard",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "CONCEPT_CODE": "1665222",
+              "CONCEPT_ID": 46287389,
+              "CONCEPT_NAME": "uridine triacetate",
+              "DOMAIN_ID": "Drug",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "RxNorm"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
       "id": 1,
       "name": "Cancer",
       "expression": {
@@ -95,7 +118,7 @@
     },
     {
       "id": 3,
-      "name": "5-FU or capecitabine",
+      "name": "5fu and capecitabine",
       "expression": {
         "items": [
           {
@@ -154,71 +177,11 @@
   "ExpressionLimit": {
     "Type": "First"
   },
-  "InclusionRules": [
-    {
-      "name": "5-FU or capecitabine Rx",
-      "expression": {
-        "Type": "ALL",
-        "CriteriaList": [
-          {
-            "Criteria": {
-              "DrugExposure": {
-                "CorrelatedCriteria": {
-                  "Type": "ALL",
-                  "CriteriaList": [
-                    {
-                      "Criteria": {
-                        "ConditionOccurrence": {
-                          "CodesetId": 1
-                        }
-                      },
-                      "StartWindow": {
-                        "Start": {
-                          "Coeff": -1
-                        },
-                        "End": {
-                          "Days": 0,
-                          "Coeff": 1
-                        },
-                        "UseEventEnd": false
-                      },
-                      "Occurrence": {
-                        "Type": 2,
-                        "Count": 1
-                      }
-                    }
-                  ],
-                  "DemographicCriteriaList": [],
-                  "Groups": []
-                },
-                "CodesetId": 3
-              }
-            },
-            "StartWindow": {
-              "Start": {
-                "Days": 14,
-                "Coeff": -1
-              },
-              "End": {
-                "Days": 0,
-                "Coeff": -1
-              },
-              "UseEventEnd": false
-            },
-            "Occurrence": {
-              "Type": 2,
-              "Count": 1
-            }
-          }
-        ],
-        "DemographicCriteriaList": [],
-        "Groups": []
-      }
-    }
-  ],
+  "InclusionRules": [],
   "EndStrategy": {
-    "DateOffset": {
-      "DateField": "EndDate",
+    "CustomEra": {
+      "DrugCodesetId": 0,
+      "GapDays": 30,
       "Offset": 0
     }
   },

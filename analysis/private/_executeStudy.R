@@ -26,7 +26,7 @@ prep_studyTask <- function(lines, value) {
   start <- blockLines[1]
   end <- blockLines[2]
   configBlock <- lines[rlang::seq2(start, end)]
-  new_configBlock <- gsub("\\[block\\]", value, configBlock)
+  new_configBlock <- gsub("\\[database\\]", value, configBlock)
 
   lines2 <- c(lines[rlang::seq2(1, start - 1L)], new_configBlock, lines[rlang::seq2(end + 1, length(lines))]) |>
     paste(collapse = "\n")

@@ -166,13 +166,26 @@ bindFiles <- function(inputPath,
 bindAndZipResults <- function(database) {
   
   resultsPath <- here::here("results", database)
-  
   outputPath <- here::here("report") %>% 
     fs::dir_create()
   
   
-  # 1. Baseline Characteristics
-  fileTypes <- c("procedures", "conditions", "condition_chapters", "drugs", "visits", "continuous", "demographics", "cohort", "observations") %>%
+  # 1. Cohort Manifest
+  fileTypes <- c("cohortManifest")
+  
+  purrr::walk(fileTypes,
+              ~bindFiles(inputPath = here::here(resultsPath, "01_buildCohorts"),
+                         database = database,
+                         pattern = ..1)
+  )
+  
+  
+  # 2. Cohort Diagnostics
+  file.copy(here::here(resultsPath, "02_cohortDiagnostics", paste0("Results_", database, ".zip")), outputPath)
+  
+            
+  # 3. Baseline Characteristics
+  fileTypes <- c("conditions", "condition_chapters", "drugs", "continuous", "demographics", "cohort") %>%
     paste0("_baseline")
   
   purrr::walk(fileTypes,
@@ -181,8 +194,9 @@ bindAndZipResults <- function(database) {
                             pattern = ..1)
   )
   
-  # 2. Post-Index Characteristics
-  fileTypes <- c("procedures", "conditions", "condition_chapters", "drugs", "visits", "cohort", "observations") %>%
+  
+  # 4. Post-Index Characteristics
+  fileTypes <- c("visits", "cohort") %>%
     paste0("_postIndex")
   
   purrr::walk(fileTypes,
@@ -192,8 +206,8 @@ bindAndZipResults <- function(database) {
   )
   
   
-  # 3. HCRU Characteristics
-  fileTypes <- c("los", "timeTo_covariates")
+  # 5. HCRU Characteristics
+  fileTypes <- c("los")
   
   purrr::walk(fileTypes,
               ~bindFiles(inputPath = here::here(resultsPath, "05_hcruCharacteristics"),
@@ -202,18 +216,24 @@ bindAndZipResults <- function(database) {
   )
   
   
-  # 4. Incidence Analysis
-  fileTypes <- c("incidence_analysis")
+  # 6. Time-To
+  fileTypes <- c("timeTo")
   
   purrr::walk(fileTypes,
-              ~bindFiles(inputPath = here::here(resultsPath, "06_incidenceAnalysis"),
+              ~bindFiles(inputPath = here::here(resultsPath, "06_timeTo"),
                          database = database,
                          pattern = ..1)
   )
   
   
-  # 5. Cohort Manifest
-  file.copy(here::here(resultsPath, "01_buildCohorts", "cohortManifest.csv"), outputPath)
+  # 7. Incidence Analysis
+  fileTypes <- c("incidence_analysis")
+  
+  purrr::walk(fileTypes,
+              ~bindFiles(inputPath = here::here(resultsPath, "07_incidenceAnalysis"),
+                         database = database,
+                         pattern = ..1)
+  )
   
   
   # Zip "report" folder

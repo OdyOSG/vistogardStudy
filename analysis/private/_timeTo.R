@@ -11,18 +11,18 @@ source("analysis/private/_utilities.R")
 timeToCovariate <- function(con,
                             cohortDatabaseSchema,
                             cohortTable,
-                            cohortKey,
-                            covariateKey,
+                            cohortId,
+                            covId,
                             database,
                             outputFolder) {
   
   cli::cat_rule("Calculating time to covariate")
   
-  targetId <- cohortKey$targetId
-  eventId <- covariateKey$covariateId
+  targetId <- cohortId
+  eventId <- covId
   
   
-  # SQL to get cohort covariates 
+  # SQL to get time-to cohort covariates 
   sql <- "
     SELECT target_cohort_id, covariate_cohort_id,
     MIN(timeTo) AS min,
@@ -72,7 +72,7 @@ timeToCovariate <- function(con,
   # Save results
   verboseSave(
     object = tb,
-    saveName = "timeTo_covariates",
+    saveName = paste0("timeToCovariate_", targetId, "_", eventId),
     saveLocation = outputFolder
   )
   
@@ -91,7 +91,6 @@ executeTimeToCovariate <- function(con,
   workDatabaseSchema <- executionSettings$workDatabaseSchema
   cohortTable <- executionSettings$cohortTable
   databaseId <- executionSettings$databaseName
-  
   outputFolder <- fs::path(here::here("results"), databaseId, analysisSettings[[1]]$outputFolder) %>%
     fs::dir_create()
   
@@ -117,14 +116,18 @@ executeTimeToCovariate <- function(con,
                   bullet = "info", bullet_col = "blue")
     
   
-    # Run time-to covariate analysis
-    timeToCovariate(con = con,
-                    cohortDatabaseSchema = workDatabaseSchema,
-                    cohortTable = cohortTable,
-                    cohortKey = cohortKey,
-                    covariateKey = covariateKey,
-                    database = databaseId,
-                    outputFolder = outputFolder)
+  grid <- tidyr::expand_grid(cohortId, covId)
+  
+  # Run time-to covariate analysis
+  purrr::pmap_dfr(grid,
+                  ~timeToCovariate(con = con,
+                                   cohortDatabaseSchema = workDatabaseSchema,
+                                   cohortTable = cohortTable,
+                                   cohortId = ..1,
+                                   covId = ..2,
+                                   database = databaseId,
+                                   outputFolder = outputFolder)
+  )
 
   
   tok <- Sys.time()

@@ -1,7 +1,45 @@
 {
   "ConceptSets": [
     {
-      "id": 1,
+      "id": 0,
+      "name": "Inpatient Visit",
+      "expression": {
+        "items": [
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Visit",
+              "CONCEPT_CODE": "IP",
+              "CONCEPT_ID": 9201,
+              "CONCEPT_NAME": "Inpatient Visit",
+              "DOMAIN_ID": "Visit",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "Visit"
+            },
+            "includeDescendants": true
+          },
+          {
+            "concept": {
+              "CONCEPT_CLASS_ID": "Visit",
+              "CONCEPT_CODE": "ERIP",
+              "CONCEPT_ID": 262,
+              "CONCEPT_NAME": "Emergency Room and Inpatient Visit",
+              "DOMAIN_ID": "Visit",
+              "INVALID_REASON": "V",
+              "INVALID_REASON_CAPTION": "Valid",
+              "STANDARD_CONCEPT": "S",
+              "STANDARD_CONCEPT_CAPTION": "Standard",
+              "VOCABULARY_ID": "Visit"
+            },
+            "includeDescendants": true
+          }
+        ]
+      }
+    },
+    {
+      "id": 2,
       "name": "Cancer",
       "expression": {
         "items": [
@@ -56,37 +94,22 @@
       }
     },
     {
-      "id": 2,
-      "name": "Inpatient Visit",
+      "id": 3,
+      "name": "vistogard",
       "expression": {
         "items": [
           {
             "concept": {
-              "CONCEPT_CLASS_ID": "Visit",
-              "CONCEPT_CODE": "IP",
-              "CONCEPT_ID": 9201,
-              "CONCEPT_NAME": "Inpatient Visit",
-              "DOMAIN_ID": "Visit",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "CONCEPT_CODE": "1665222",
+              "CONCEPT_ID": 46287389,
+              "CONCEPT_NAME": "uridine triacetate",
+              "DOMAIN_ID": "Drug",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "Visit"
-            },
-            "includeDescendants": true
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Visit",
-              "CONCEPT_CODE": "ERIP",
-              "CONCEPT_ID": 262,
-              "CONCEPT_NAME": "Emergency Room and Inpatient Visit",
-              "DOMAIN_ID": "Visit",
-              "INVALID_REASON": "V",
-              "INVALID_REASON_CAPTION": "Valid",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "Visit"
+              "VOCABULARY_ID": "RxNorm"
             },
             "includeDescendants": true
           }
@@ -94,8 +117,8 @@
       }
     },
     {
-      "id": 3,
-      "name": "5-FU or capecitabine",
+      "id": 4,
+      "name": "5FU or capcitabine",
       "expression": {
         "items": [
           {
@@ -136,7 +159,46 @@
     "CriteriaList": [
       {
         "VisitOccurrence": {
-          "CodesetId": 2
+          "CorrelatedCriteria": {
+            "Type": "ALL",
+            "CriteriaList": [
+              {
+                "Criteria": {
+                  "DrugExposure": {
+                    "CodesetId": 3
+                  }
+                },
+                "StartWindow": {
+                  "Start": {
+                    "Days": 0,
+                    "Coeff": 1
+                  },
+                  "End": {
+                    "Coeff": 1
+                  },
+                  "UseEventEnd": false
+                },
+                "EndWindow": {
+                  "Start": {
+                    "Coeff": -1
+                  },
+                  "End": {
+                    "Days": 0,
+                    "Coeff": 1
+                  },
+                  "UseIndexEnd": true,
+                  "UseEventEnd": false
+                },
+                "Occurrence": {
+                  "Type": 0,
+                  "Count": 0
+                }
+              }
+            ],
+            "DemographicCriteriaList": [],
+            "Groups": []
+          },
+          "CodesetId": 0
         }
       }
     ],
@@ -156,7 +218,7 @@
   },
   "InclusionRules": [
     {
-      "name": "5-FU or capecitabine Rx",
+      "name": "no capecitabine and 5FU",
       "expression": {
         "Type": "ALL",
         "CriteriaList": [
@@ -169,7 +231,7 @@
                     {
                       "Criteria": {
                         "ConditionOccurrence": {
-                          "CodesetId": 1
+                          "CodesetId": 2
                         }
                       },
                       "StartWindow": {
@@ -178,7 +240,7 @@
                         },
                         "End": {
                           "Days": 0,
-                          "Coeff": 1
+                          "Coeff": -1
                         },
                         "UseEventEnd": false
                       },
@@ -191,12 +253,11 @@
                   "DemographicCriteriaList": [],
                   "Groups": []
                 },
-                "CodesetId": 3
+                "CodesetId": 4
               }
             },
             "StartWindow": {
               "Start": {
-                "Days": 14,
                 "Coeff": -1
               },
               "End": {

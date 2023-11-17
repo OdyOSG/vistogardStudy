@@ -2,64 +2,82 @@ postIndexPrevalence:
   cohorts:
     targetCohorts:
     - targetName: patients_exposed_5fu
-      targetId: 1
-    - targetName: patients_exposed_vistogard
-      targetId: 2
+      targetId: 1.0
+    - targetName: patients_exposed_vistogard_broad
+      targetId: 2.0
+    - targetName: patients_exposed_vistogard_narrow
+      targetId: 3.0
+    - targetName: patients_no_vistogard
+      targetId: 4.0
     - targetName: patients_toxicity_5fu
-      targetId: 3
-    outcomeCohorts:
-    - outcomeName: antianxiety_medication
-      outcomeId: 22
-    - outcomeName: antiarrhythmics
-      outcomeId: 23
-    - outcomeName: antibiotics_antifungal_medication
-      outcomeId: 24
-    - outcomeName: antidiarrheal_drugs
-      outcomeId: 25
-    - outcomeName: antiepileptics
-      outcomeId: 26
-    - outcomeName: blood_transfusion
-      outcomeId: 27
-    - outcomeName: cardiac_devices
-      outcomeId: 28
-    - outcomeName: cardiac_enzymes
-      outcomeId: 29
-    - outcomeName: cardiac_icu
-      outcomeId: 30
-    - outcomeName: cardiopulmonary_resuscitation
-      outcomeId: 31
-    - outcomeName: corticosteroids
-      outcomeId: 32
-    - outcomeName: ct_scan
-      outcomeId: 33
-    - outcomeName: defibrilation
-      outcomeId: 34
-    - outcomeName: diuretics
-      outcomeId: 35
-    - outcomeName: ecgs
-      outcomeId: 36
-    - outcomeName: echocardiogram
-      outcomeId: 37
-    - outcomeName: inotropic_medication
-      outcomeId: 38
-    - outcomeName: intubation_and_ventilation
-      outcomeId: 39
-    - outcomeName: lactulose
-      outcomeId: 40
-    - outcomeName: mri
-      outcomeId: 41
-    - outcomeName: nystatin
-      outcomeId: 42
-    - outcomeName: pain_medication
-      outcomeId: 43
-    - outcomeName: parenteral_nutrition
-      outcomeId: 44
-    - outcomeName: sucralfate
-      outcomeId: 45
-    - outcomeName: vasodilators
-      outcomeId: 46
-    - outcomeName: vasopressors
-      outcomeId: 47
+      targetId: 5.0
+    - targetName: earlyToxicity
+      targetId: 2011.0
+    - targetName: lateToxicity
+      targetId: 2001.0
+    covariateCohorts:
+    - covariateName: 5fu
+      covariateId: 24
+    - covariateName: antianxiety_medication
+      covariateId: 25
+    - covariateName: antiarrhythmics
+      covariateId: 26
+    - covariateName: antibiotics_antifungal_medication
+      covariateId: 27
+    - covariateName: antidiarrheal_drugs
+      covariateId: 28
+    - covariateName: antiepileptics
+      covariateId: 29
+    - covariateName: anyChemo
+      covariateId: 30
+    - covariateName: blood_transfusion
+      covariateId: 31
+    - covariateName: cardiac_devices
+      covariateId: 32
+    - covariateName: cardiac_enzymes
+      covariateId: 33
+    - covariateName: cardiopulmonary_resuscitation
+      covariateId: 34
+    - covariateName: ccu
+      covariateId: 35
+    - covariateName: corticosteroids
+      covariateId: 36
+    - covariateName: ct_scan
+      covariateId: 37
+    - covariateName: defibrilation
+      covariateId: 38
+    - covariateName: diuretics
+      covariateId: 39
+    - covariateName: ecgs
+      covariateId: 40
+    - covariateName: echocardiogram
+      covariateId: 41
+    - covariateName: icu
+      covariateId: 42
+    - covariateName: icuProxy
+      covariateId: 43
+    - covariateName: inotropic_medication
+      covariateId: 44
+    - covariateName: intubation_and_ventilation
+      covariateId: 45
+    - covariateName: lactulose
+      covariateId: 46
+    - covariateName: mri
+      covariateId: 47
+    - covariateName: nystatin
+      covariateId: 48
+    - covariateName: otherChemo
+      covariateId: 49
+    - covariateName: pain_medication
+      covariateId: 50
+    - covariateName: parenteral_nutrition
+      covariateId: 51
+    - covariateName: sucralfate
+      covariateId: 52
+    - covariateName: vasodilators
+      covariateId: 53
+    - covariateName: vasopressors
+      covariateId: 54
   timeWindow:
   - startDay: 0
     endDay: 0

@@ -2,25 +2,25 @@
 
 # Name: HCRU Characteristics
 
+
 # B. Dependencies ----------------------
 
+## Load libraries and scripts
 library(tidyverse, quietly = TRUE)
 library(DatabaseConnector)
 library(config)
-
 source("analysis/private/_utilities.R")
 source("analysis/private/_hcru.R")
-source("analysis/private/_timeTo.R")
 
 
 # C. Connection ----------------------
 
-# Set connection Block
+## Set connection block
 # <<<
 configBlock <- "[database]"
 # >>>
 
-# Provide connection details
+## Provide connection details
 connectionDetails <- DatabaseConnector::createConnectionDetails(
   dbms = config::get("dbms",config = configBlock),
   user = config::get("user",config = configBlock),
@@ -28,35 +28,30 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
   connectionString = config::get("connectionString", config = configBlock)
 )
 
-# Connect to database
+## Connect to database
 con <- DatabaseConnector::connect(connectionDetails)
 
 
 # D. Variables -----------------------
 
-### Administrative Variables
+## Administrative Variables
 executionSettings <- config::get(config = configBlock) %>%
   purrr::discard_at(c("dbms", "user", "password", "connectionString"))
 
-### Analysis Settings
-analysisSettings1 <- readSettingsFile(here::here("analysis/settings/hcruCharacteristics.yml"))
-analysisSettings2 <- readSettingsFile(here::here("analysis/settings/timeToAnalysis.yml"))
+## Analysis Settings
+analysisSettings <- readSettingsFile(here::here("analysis/settings/hcruCharacteristics.yml"))
 
 
 # E. Script --------------------
 
-# Run HCRU analysis
+## Run HCRU analysis
 
 executeHcruAnalysis(con = con,
                     executionSettings = executionSettings,
-                    analysisSettings = analysisSettings1)
+                    analysisSettings = analysisSettings)
 
-# Run Time-To analysis
-
-executeTimeToCovariate(con = con,
-                       executionSettings = executionSettings,
-                       analysisSettings = analysisSettings2)
 
 
 # F. Session Info ------------------------
+
 DatabaseConnector::disconnect(con)
