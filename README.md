@@ -48,5 +48,5 @@ This study will be run on the following OMOP databases:
 
 ## Study Documentation
 
--   [**How To Run**]()
--   [**Contribution Guidelines**]()
+-   [**How To Run**](https://github.com/OdyOSG/vistogardStudy/blob/main/HowToRun.md)
+-   [**Contribution Guidelines**]
