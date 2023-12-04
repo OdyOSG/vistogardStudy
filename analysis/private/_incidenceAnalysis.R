@@ -52,7 +52,6 @@ defineIncidenceAnalysis <- function(cohortId,
   )
 
 
-
   analysisList <- purrr::pmap(
     analysisMap,
     ~CohortIncidence::createIncidenceAnalysis(

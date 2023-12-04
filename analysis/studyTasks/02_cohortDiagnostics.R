@@ -59,4 +59,5 @@ runCohortDiagnostics(executionSettings = executionSettings,
 
 
 # F. Session Info ------------------------
+
 DatabaseConnector::disconnect(con)

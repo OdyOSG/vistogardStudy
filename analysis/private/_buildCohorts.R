@@ -9,18 +9,48 @@
 
 # B. Functions ------------------------
 
-initializeCohortTables <- function(executionSettings, con) {
-
+initializeCohortTables <- function(executionSettings,
+                                   con,
+                                   dropTables = FALSE) {
+  
   name <- executionSettings$cohortTable
-
+  
   cohortTableNames <- list(cohortTable = paste0(name),
                            cohortInclusionTable = paste0(name, "_inclusion"),
                            cohortInclusionResultTable = paste0(name, "_inclusion_result"),
                            cohortInclusionStatsTable = paste0(name, "_inclusion_stats"),
                            cohortSummaryStatsTable = paste0(name, "_summary_stats"),
                            cohortCensorStatsTable = paste0(name, "_censor_stats"))
-
-
+  
+  
+  ## Drop cohort tables
+  if (dropTables == TRUE) {
+    
+    ## Delete csv files from "01_buildCohorts" folder
+    manifestPath <- here::here("results", executionSettings$databaseName, "01_buildCohorts")
+    pathFiles <- list.files(manifestPath,  full.names = TRUE)
+    sapply(pathFiles, unlink)
+    
+    
+    ## Drop cohort tables
+    for (i in 1:length(cohortTableNames)) {
+      
+      sql <- "DROP TABLE IF EXISTS @writeSchema.@tableName;"
+      
+      dropSql <- SqlRender::render(
+        sql,
+        writeSchema = executionSettings$workDatabaseSchema,
+        tableName = cohortTableNames[i]
+      ) %>%
+        SqlRender::translate(targetDialect = "snowflake")
+      
+      DatabaseConnector::executeSql(connection = con, dropSql, progressBar = FALSE)
+      
+    }
+  }
+  
+  
+  ## Create cohort tables
   CohortGenerator::createCohortTables(connection = con,
                                       cohortDatabaseSchema = executionSettings$workDatabaseSchema,
                                       cohortTableNames = cohortTableNames,
@@ -109,6 +139,7 @@ generateCohorts <- function(executionSettings,
   return(cohortCounts)
 }
 
+
 # Run Cohort Diagnostis
 # Description: this function is used to run cohort diagnostics. preps cohorts for run
 # and then executes cohort diagnostics
@@ -159,46 +190,5 @@ runCohortDiagnostics <- function(con,
                   bullet = "tick", bullet_col = "green")
 
   invisible(cohortsToRun)
-}
-
-
-
-dropCohortTables <- function(executionSettings, 
-                             con,
-                             deleteManifest = TRUE) {
-  
-  # Delete files in folder "01_buildCohorts"
-  if (deleteManifest == TRUE) {
-    
-    manifestPath <- here::here("results", executionSettings$databaseName, "01_buildCohorts")
-    pathFiles <- list.files(manifestPath,  full.names = TRUE)
-    sapply(pathFiles, unlink)
-    
-  }
-
-  name <- executionSettings$cohortTable
-
-  cohortTableNames <- list(cohortTable = paste0(name),
-                           cohortInclusionTable = paste0(name, "_inclusion"),
-                           cohortInclusionResultTable = paste0(name, "_inclusion_result"),
-                           cohortInclusionStatsTable = paste0(name, "_inclusion_stats"),
-                           cohortSummaryStatsTable = paste0(name, "_summary_stats"),
-                           cohortCensorStatsTable = paste0(name, "_censor_stats"))
-
-  for (i in 1:length(cohortTableNames)) {
-
-    sql <- "DROP TABLE IF EXISTS @writeSchema.@tableName;"
-
-    dropSql <- SqlRender::render(
-      sql,
-      writeSchema = executionSettings$workDatabaseSchema,
-      tableName = cohortTableNames[i]
-    ) %>%
-      SqlRender::translate(targetDialect = con@dbms)
-
-    DatabaseConnector::executeSql(connection = con, dropSql, progressBar = FALSE)
-
-  }
-
 }
 

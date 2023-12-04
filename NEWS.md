@@ -1,3 +1,7 @@
+# VISTOGARD v0.2.0
+
+* Corrected cohort definitions and analysis settings
+
 # VISTOGARD v0.1.0
 
 * Added cohort definition JSONs (covariates, outcomes)

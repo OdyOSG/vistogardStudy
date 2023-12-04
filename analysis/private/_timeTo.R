@@ -67,7 +67,18 @@ timeToCovariate <- function(con,
   tb <- DatabaseConnector::querySql(connection = con, sql = cohortCovariateSql)
   names(tb) <- tolower(names(tb))
   tb <- tb %>%
-    dplyr::mutate(database = executionSettings$databaseName)
+    dplyr::mutate(database = executionSettings$databaseName,
+                  target_cohort_id = as.integer(target_cohort_id),
+                  covariate_cohort_id = as.integer(covariate_cohort_id),
+                  min = as.double(min),
+                  max = as.double(max),
+                  p10 = as.double(p10),
+                  p25 = as.double(p25),
+                  median = as.double(median),
+                  p75 = as.double(p75),
+                  p90 = as.double(p90),
+                  sd = as.double(sd)
+                  )
   
   # Save results
   verboseSave(
