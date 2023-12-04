@@ -2,38 +2,22 @@
   "ConceptSets": [
     {
       "id": 0,
-      "name": "icu",
+      "name": "Vistogard",
       "expression": {
         "items": [
           {
             "concept": {
-              "CONCEPT_CLASS_ID": "Visit",
-              "CONCEPT_CODE": "OMOP4822460",
-              "CONCEPT_ID": 32037,
-              "CONCEPT_NAME": "Intensive Care",
-              "DOMAIN_ID": "Visit",
+              "CONCEPT_CLASS_ID": "Ingredient",
+              "CONCEPT_CODE": "1665222",
+              "CONCEPT_ID": 46287389,
+              "CONCEPT_NAME": "uridine triacetate",
+              "DOMAIN_ID": "Drug",
               "INVALID_REASON": "V",
               "INVALID_REASON_CAPTION": "Valid",
               "STANDARD_CONCEPT": "S",
               "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "Visit"
+              "VOCABULARY_ID": "RxNorm"
             },
-            "includeDescendants": true
-          },
-          {
-            "concept": {
-              "CONCEPT_CLASS_ID": "Visit",
-              "CONCEPT_CODE": "OMOP4822038",
-              "CONCEPT_ID": 581383,
-              "CONCEPT_NAME": "Inpatient Cardiac Care Facility",
-              "DOMAIN_ID": "Visit",
-              "INVALID_REASON": "V",
-              "INVALID_REASON_CAPTION": "Valid",
-              "STANDARD_CONCEPT": "S",
-              "STANDARD_CONCEPT_CAPTION": "Standard",
-              "VOCABULARY_ID": "CMS Place of Service"
-            },
-            "isExcluded": true,
             "includeDescendants": true
           }
         ]
@@ -43,7 +27,7 @@
   "PrimaryCriteria": {
     "CriteriaList": [
       {
-        "VisitOccurrence": {
+        "DrugExposure": {
           "CodesetId": 0
         }
       }
@@ -63,6 +47,13 @@
     "Type": "First"
   },
   "InclusionRules": [],
+  "EndStrategy": {
+    "CustomEra": {
+      "DrugCodesetId": 0,
+      "GapDays": 30,
+      "Offset": 0
+    }
+  },
   "CensoringCriteria": [],
   "CollapseSettings": {
     "CollapseType": "ERA",

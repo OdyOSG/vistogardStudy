@@ -5,7 +5,7 @@ incidenceAnalysis:
       id: 1
     numerator:
     - name: patients_toxicity_5fu
-      id: 5
+      id: 7
   incidenceSettings:
     cleanWindow: 0
     startWith: start

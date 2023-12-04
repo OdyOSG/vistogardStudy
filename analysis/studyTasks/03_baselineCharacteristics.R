@@ -67,4 +67,5 @@ executeConditionRollup(con = con,
 
 
 # F. Session Info ------------------------
+
 DatabaseConnector::disconnect(con)

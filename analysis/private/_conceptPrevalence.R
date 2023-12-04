@@ -400,7 +400,14 @@ getCohortFE <- function(con,
     dplyr::collect() %>%
     dplyr::mutate(name = gsub(".*: ", "", name),
                   timeWindow = paste0(abs(timeA), "_", abs(timeB)),
-                  database = executionSettings$databaseName)
+                  database = executionSettings$databaseName,
+                  cohortDefinitionId = as.integer(cohortDefinitionId),
+                  covariateId = as.integer(covariateId),
+                  n = as.integer(n),
+                  pct = as.double(pct),
+                  analysisId = as.integer(analysisId),
+                  conceptId = as.integer(conceptId)
+                  )
   
   
   # Output file name

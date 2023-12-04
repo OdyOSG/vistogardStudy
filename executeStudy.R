@@ -1,8 +1,6 @@
 # A. File Info ----------------
 
 # Name: Execute Study
-# Author: Martin Lavallee
-# Date: 2023-09-12
 # Description: The purpose of executeStudy.R is to run all the tasks required for the study.
 
 
@@ -15,7 +13,7 @@ source(here::here("analysis/private/_executeStudy.R"))
 # C. Variables ----------------
 
 ## Edit to respective config block (database)
-configBlock <- ""
+configBlock <- "[database]"
 
 ## Provide path to tasks
 studyTaskFolder <- here::here("analysis/studyTasks")
@@ -45,5 +43,5 @@ runStudyTask(file = studyTaskFiles[6], configBlock = configBlock)
 ## Task 7: Run Incidence Analysis
 runStudyTask(file = studyTaskFiles[7], configBlock = configBlock)
 
-## Task 8: Share Results
+# ## Task 8: Share Results
 runStudyTask(file = studyTaskFiles[8], configBlock = configBlock)

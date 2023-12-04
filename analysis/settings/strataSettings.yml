@@ -3,7 +3,13 @@ strata:
     targetCohorts:
     - targetName: patients_exposed_vistogard_broad
       targetId: 2
+    - targetName: patients_exposed_vistogard_broad_woCancerDx
+      targetId: 3
+    - targetName: patients_exposed_vistogard_narrow
+      targetId: 4
+    - targetName: patients_exposed_vistogard_narrow_woCancerDx
+      targetId: 5
     strataCohorts:
-    - strataName: patients_exposed_5fu
-      strataId: 1
+    - strataName: patients_toxicity_5fu
+      strataId: 7
   outputFolder: 01_buildCohorts

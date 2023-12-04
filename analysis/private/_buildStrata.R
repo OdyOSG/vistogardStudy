@@ -48,7 +48,7 @@ cohortStrata <- function(con,
             where cohort_definition_id IN (@strataId)
           ) strata_cohort
         ON tar_cohort.subject_id = strata_cohort.subject_id
-        and strata_cohort.cohort_start_date < DATEADD(days, -4, tar_cohort.cohort_start_date)
+        and tar_cohort.cohort_start_date >= DATEADD(days, 4, strata_cohort.cohort_start_date) 
         and strata_cohort.cohort_end_date >= tar_cohort.cohort_start_date
         ;
 
@@ -95,12 +95,14 @@ cohortStrata <- function(con,
   DatabaseConnector::executeSql(connection = con, cohortStrataSql, progressBar = FALSE)
   
   ## Strata IDs
-  strataIds <- c(cohortIdWithoutStrata, cohortIdWithStrata)
+  ids <- c(cohortIdWithoutStrata, cohortIdWithStrata)
+  strataIds <- data.frame(id = ids)
   
   #TODO Add timing
   cohortSchemaTable <- paste(cohortDatabaseSchema, cohortTable, sep = ".")
   cli::cat_bullet("Cohort strata written to ", cohortSchemaTable,
                   bullet = "tick", bullet_col = "green")
+  
   
   return(strataIds)
 }
@@ -123,14 +125,19 @@ buildStrata <- function(con,
   targetCohorts <- analysisSettings$strata$cohorts$targetCohorts
   strataCohorts <- analysisSettings$strata$cohorts$strataCohorts 
   
+  grid <- tidyr::expand_grid(targetCohorts$targetId, strataCohorts$strataId)
+  
   cli::cat_rule("Building Cohort Strata")
   
 
-  strataIds <- cohortStrata(con = con,
-                           cohortDatabaseSchema = workDatabaseSchema,
-                           cohortTable = cohortTable,
-                           targetId = targetCohorts$targetId,
-                           strataId = strataCohorts$strataId)
+  strataIds <- purrr::pmap_dfr(grid,
+                               ~ cohortStrata(con = con,
+                                              cohortDatabaseSchema = workDatabaseSchema,
+                                              cohortTable = cohortTable,
+                                              targetId = ..1,
+                                              strataId = ..2)
+  )
+
   
   sql <- "
     SELECT
@@ -147,15 +154,23 @@ buildStrata <- function(con,
     sql,
     cohortDatabaseSchema = workDatabaseSchema,
     cohortTable = cohortTable,
-    strataIds = strataIds) %>% 
+    strataIds = strataIds$id) %>% 
     SqlRender::translate(targetDialect = con@dbms)
     
   
   strataCounts <- DatabaseConnector::querySql(connection = con, sql = renderedSql, snakeCaseToCamelCase = TRUE) %>%
     dplyr::mutate(
-      name = dplyr::case_when(id == 2011 ~ "earlyToxicity",
-                              id == 2001 ~ "lateToxicity",
-                              TRUE ~ NA_character_),
+      name = dplyr::case_when(
+        id == 2017 ~ "c2: earlyToxicity",
+        id == 2007 ~ "c2: lateToxicity",
+        id == 3017 ~ "c3: earlyToxicity",
+        id == 3007 ~ "c3: lateToxicity",
+        id == 4017 ~ "c4: earlyToxicity",
+        id == 4007 ~ "c4: lateToxicity",
+        id == 5017 ~ "c5: earlyToxicity",
+        id == 5007 ~ "c5: lateToxicity",
+        TRUE ~ NA_character_
+        ),
       file = NA,
       database = executionSettings$databaseName
     )

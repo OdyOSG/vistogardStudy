@@ -5,53 +5,69 @@ baselineCharacteristics:
       targetId: 1.0
     - targetName: patients_exposed_vistogard_broad
       targetId: 2.0
-    - targetName: patients_exposed_vistogard_narrow
+    - targetName: patients_exposed_vistogard_broad_woCancerDx
       targetId: 3.0
-    - targetName: patients_no_vistogard
+    - targetName: patients_exposed_vistogard_narrow
       targetId: 4.0
-    - targetName: patients_toxicity_5fu
+    - targetName: patients_exposed_vistogard_narrow_woCancerDx
       targetId: 5.0
-    - targetName: earlyToxicity
-      targetId: 2011.0
-    - targetName: lateToxicity
-      targetId: 2001.0
+    - targetName: patients_no_vistogard
+      targetId: 6.0
+    - targetName: patients_toxicity_5fu
+      targetId: 7.0
+    - targetName: 'c2: earlyToxicity'
+      targetId: 2017.0
+    - targetName: 'c2: lateToxicity'
+      targetId: 2007.0
+    - targetName: 'c3: earlyToxicity'
+      targetId: 3017.0
+    - targetName: 'c3: lateToxicity'
+      targetId: 3007.0
+    - targetName: 'c4: earlyToxicity'
+      targetId: 4017.0
+    - targetName: 'c4: lateToxicity'
+      targetId: 4007.0
+    - targetName: 'c5: earlyToxicity'
+      targetId: 5017.0
+    - targetName: 'c5: lateToxicity'
+      targetId: 5007.0
     covariateCohorts:
     - covariateName: all_cancer
-      covariateId: 6
-    - covariateName: atrial_fibrillation
-      covariateId: 7
-    - covariateName: bladder_cancer
       covariateId: 8
-    - covariateName: breast_cancer
+    - covariateName: atrial_fibrillation
       covariateId: 9
-    - covariateName: cardiomyopathy
+    - covariateName: bladder_cancer
       covariateId: 10
-    - covariateName: cervix_cancer
+    - covariateName: breast_cancer
       covariateId: 11
-    - covariateName: chronic_kidney_disease
+    - covariateName: cardiomyopathy
       covariateId: 12
-    - covariateName: colorectal_cancer
+    - covariateName: cervix_cancer
       covariateId: 13
-    - covariateName: coronary_artery_disease
+    - covariateName: chronic_kidney_disease
       covariateId: 14
-    - covariateName: esophagial_cancer
+    - covariateName: colorectal_cancer
       covariateId: 15
-    - covariateName: gastric_cancer
+    - covariateName: coronary_artery_disease
       covariateId: 16
-    - covariateName: head_neck_cancer
+    - covariateName: esophagial_cancer
       covariateId: 17
-    - covariateName: heart_failure
+    - covariateName: gastric_cancer
       covariateId: 18
-    - covariateName: hyperthyroidism
+    - covariateName: head_neck_cancer
       covariateId: 19
-    - covariateName: myocardial_infarction
+    - covariateName: heart_failure
       covariateId: 20
-    - covariateName: pancreas_cancer
+    - covariateName: hyperthyroidism
       covariateId: 21
-    - covariateName: renal_failure
+    - covariateName: myocardial_infarction
       covariateId: 22
-    - covariateName: type_2_diabetes
+    - covariateName: pancreas_cancer
       covariateId: 23
+    - covariateName: renal_failure
+      covariateId: 24
+    - covariateName: type_2_diabetes
+      covariateId: 25
   timeWindow:
   - startDay: -365
     endDay: -1

@@ -1,5 +1,6 @@
 # Project Files
 results/
+results_old/
 config.yml
 errorReportSql.txt
 misc/

@@ -2,12 +2,16 @@ incidenceAnalysis:
   cohorts:
     denominator:
     - name: patients_toxicity_5fu
-      id: 5
+      id: 7
     numerator:
     - name: patients_exposed_vistogard_broad
       id: 2
-    - name: patients_exposed_vistogard_narrow
+    - name: patients_exposed_vistogard_broad_woCancerDx
       id: 3
+    - name: patients_exposed_vistogard_narrow
+      id: 4
+    - name: patients_exposed_vistogard_narrow_woCancerDx
+      id: 5
   incidenceSettings:
     cleanWindow: 0
     startWith: start

@@ -53,7 +53,7 @@ analysisSettings <- readSettingsFile(here::here("analysis/settings/strataSetting
 # E. Script --------------------
 
 ### RUN ONCE - Initialize cohort table ###
-initializeCohortTables(executionSettings = executionSettings, con = con)
+initializeCohortTables(executionSettings = executionSettings, con = con, dropTables = FALSE)
 
 
 ## Build cohorts
@@ -74,4 +74,5 @@ buildStrata(con = con,
 
 
 # F. Session Info ------------------------
+
 DatabaseConnector::disconnect(con)
