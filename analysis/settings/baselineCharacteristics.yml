@@ -2,35 +2,19 @@ baselineCharacteristics:
   cohorts:
     targetCohorts:
     - targetName: patients_exposed_5fu
-      targetId: 1.0
+      targetId: 1
     - targetName: patients_exposed_vistogard_broad
-      targetId: 2.0
+      targetId: 2
     - targetName: patients_exposed_vistogard_broad_woCancerDx
-      targetId: 3.0
+      targetId: 3
     - targetName: patients_exposed_vistogard_narrow
-      targetId: 4.0
+      targetId: 4
     - targetName: patients_exposed_vistogard_narrow_woCancerDx
-      targetId: 5.0
+      targetId: 5
     - targetName: patients_no_vistogard
-      targetId: 6.0
+      targetId: 6
     - targetName: patients_toxicity_5fu
-      targetId: 7.0
-    - targetName: 'c2: earlyToxicity'
-      targetId: 2017.0
-    - targetName: 'c2: lateToxicity'
-      targetId: 2007.0
-    - targetName: 'c3: earlyToxicity'
-      targetId: 3017.0
-    - targetName: 'c3: lateToxicity'
-      targetId: 3007.0
-    - targetName: 'c4: earlyToxicity'
-      targetId: 4017.0
-    - targetName: 'c4: lateToxicity'
-      targetId: 4007.0
-    - targetName: 'c5: earlyToxicity'
-      targetId: 5017.0
-    - targetName: 'c5: lateToxicity'
-      targetId: 5007.0
+      targetId: 7
     covariateCohorts:
     - covariateName: all_cancer
       covariateId: 8

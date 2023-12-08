@@ -1,3 +1,7 @@
+# VISTOGARD v0.3.0
+
+* Corrected `_buildStrata.R` SQL code 
+
 # VISTOGARD v0.2.0
 
 * Corrected cohort definitions and analysis settings

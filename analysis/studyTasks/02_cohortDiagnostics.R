@@ -52,10 +52,10 @@ diagCohorts <- getCohortManifest() %>%
 
 ## Run cohort diagnostics
 
-runCohortDiagnostics(executionSettings = executionSettings,
-                     con = con,
-                     cohortManifest = diagCohorts,
-                     outputFolder = outputFolder)
+# runCohortDiagnostics(executionSettings = executionSettings,
+#                      con = con,
+#                      cohortManifest = diagCohorts,
+#                      outputFolder = outputFolder)
 
 
 # F. Session Info ------------------------
