@@ -24,7 +24,7 @@ cohortStrata <- function(con,
                 select * from @cohortDatabaseSchema.@cohortTable
                 where cohort_definition_id IN (@targetId)
               ) tar_cohort
-        join (
+        inner join (
               select * from @cohortDatabaseSchema.@cohortTable
               where cohort_definition_id IN (@strataId)
           ) strata_cohort
@@ -43,12 +43,12 @@ cohortStrata <- function(con,
             select * from @cohortDatabaseSchema.@cohortTable
             where cohort_definition_id IN (@targetId)
           ) tar_cohort
-        left join (
+        inner join (
             select * from @cohortDatabaseSchema.@cohortTable
             where cohort_definition_id IN (@strataId)
           ) strata_cohort
         ON tar_cohort.subject_id = strata_cohort.subject_id
-        and tar_cohort.cohort_start_date >= DATEADD(days, 4, strata_cohort.cohort_start_date) 
+        and strata_cohort.cohort_start_date < DATEADD(days, -4, tar_cohort.cohort_start_date) 
         and strata_cohort.cohort_end_date >= tar_cohort.cohort_start_date
         ;
 
